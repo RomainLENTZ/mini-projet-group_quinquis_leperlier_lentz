@@ -36,7 +36,6 @@ class HomeFragment : Fragment() {
 
         with(homeViewModel) {
             token.observe(viewLifecycleOwner, Observer {
-                //récupérer les catégories
                 getCategories()
             })
 
