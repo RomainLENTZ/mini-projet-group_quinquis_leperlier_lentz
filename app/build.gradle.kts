@@ -10,7 +10,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.jolumax.imdb"
+        applicationId = "com.yorolu.imdb"
         minSdk = 24
         versionCode = 1
         versionName = "1.0"
