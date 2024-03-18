@@ -7,11 +7,17 @@ import com.bumptech.glide.Glide
 import com.gmail.eamosse.imdb.databinding.CategoryListItemBinding
 import com.leperlier.quinquis.lentz.imdb.data.Category
 
-class CategoryAdapter(private val items: List<Category>) :
+class CategoryAdapter(private val items: List<Category>, private val onItemClick: (Category) -> Unit) :
     RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: CategoryListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener {
+                onItemClick.invoke(items[adapterPosition])
+            }
+        }
         fun bind(item: Category) {
             binding.categoryName.text = item.name
         }

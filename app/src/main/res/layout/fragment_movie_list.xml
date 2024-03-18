@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginEnd="2dp"
+    android:layout_marginStart="2dp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/category_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/movie_label"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/category_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/category_img"
+        app:layout_constraintEnd_toEndOf="@id/category_img"
+        app:layout_constraintStart_toStartOf="@id/category_img"
+        app:layout_constraintTop_toTopOf="@id/category_img"
+        tools:text="Actions et Aventures" />
+
+    <TextView
+        android:id="@+id/movie_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Movies"
+        app:layout_constraintTop_toBottomOf="@id/category_img"
+        app:layout_constraintBottom_toTopOf="@id/moviesRecyclerView"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/moviesRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/movie_label"
+
+
+        tools:listitem="@layout/movie_list_item"
+        />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

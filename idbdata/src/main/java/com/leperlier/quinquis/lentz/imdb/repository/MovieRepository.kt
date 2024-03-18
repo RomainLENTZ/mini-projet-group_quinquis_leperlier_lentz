@@ -1,6 +1,7 @@
 package com.leperlier.quinquis.lentz.imdb.repository
 
 import com.leperlier.quinquis.lentz.imdb.data.Category
+import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.Token
 import com.leperlier.quinquis.lentz.imdb.datasources.LocalDataSource
 import com.leperlier.quinquis.lentz.imdb.datasources.OnlineDataSource
@@ -41,6 +42,15 @@ class MovieRepository @Inject internal constructor(
                     it.toCategory()
                 }
                 Result.Succes(categories)
+            }
+            is Result.Error -> result
+        }
+    }
+
+    suspend fun getMovies(): Result<List<Movie>> {
+        return when(val result = online.getMovies()) {
+            is Result.Succes -> {
+                Result.Succes(result.data.results)
             }
             is Result.Error -> result
         }

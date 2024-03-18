@@ -1,5 +1,6 @@
 package com.leperlier.quinquis.lentz.imdb.datasources
 
+import MovieResponse
 import com.leperlier.quinquis.lentz.imdb.api.response.toToken
 import com.leperlier.quinquis.lentz.imdb.api.service.MovieService
 import com.leperlier.quinquis.lentz.imdb.data.Token
@@ -70,4 +71,20 @@ internal class OnlineDataSource @Inject constructor(private val service: MovieSe
             }
         }
     }
+
+    suspend fun getMovies(): Result<MovieResponse> = safeCall {
+        service.getMovies().let { response ->
+            if (response.isSuccessful) {
+                Result.Succes(response.body()!!)
+            } else {
+                Result.Error(
+                    exception = Exception("Erreur lors de la récupération des films par genres"),
+                    message = response.message(),
+                    code = response.code()
+                )
+            }
+        }
+    }
+
+
 }

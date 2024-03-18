@@ -1,6 +1,7 @@
 package com.leperlier.quinquis.lentz.imdb.api.service
 
 import CategoryResponse
+import MovieResponse
 import com.leperlier.quinquis.lentz.imdb.api.response.TokenResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -11,4 +12,7 @@ internal interface MovieService {
 
     @GET("genre/movie/list")
     suspend fun getCategories(): Response<CategoryResponse>
+
+    @GET("discover/movie")
+    suspend fun getMovies(): Response<MovieResponse>
 }
