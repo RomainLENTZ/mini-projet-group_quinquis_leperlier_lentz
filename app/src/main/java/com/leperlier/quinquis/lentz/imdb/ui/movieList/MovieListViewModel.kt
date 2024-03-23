@@ -1,4 +1,4 @@
-package com.gmail.eamosse.imdb.ui.home
+package com.leperlier.quinquis.lentz.imdb.ui.movieList
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

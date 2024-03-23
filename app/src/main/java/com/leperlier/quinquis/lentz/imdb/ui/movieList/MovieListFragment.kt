@@ -7,14 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.gmail.eamosse.imdb.databinding.FragmentMovieListBinding
-import com.gmail.eamosse.imdb.ui.home.HomeViewModel
-import com.gmail.eamosse.imdb.ui.home.MovieListViewModel
-import com.leperlier.quinquis.lentz.imdb.data.Movie
-import com.leperlier.quinquis.lentz.imdb.ui.MoviesAdapter
-import com.leperlier.quinquis.lentz.imdb.ui.home.CategoryAdapter
+import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MovieListFragment : Fragment() {
 
     private val movieListViewModel: MovieListViewModel by viewModels()
@@ -35,7 +32,7 @@ class MovieListFragment : Fragment() {
             })
 
             movies.observe(viewLifecycleOwner, Observer {
-                binding.moviesRecyclerView.adapter = MoviesAdapter(it)
+                binding.moviesRecyclerView.adapter = MovieAdapter(it)
             })
 
             error.observe(viewLifecycleOwner, Observer {
