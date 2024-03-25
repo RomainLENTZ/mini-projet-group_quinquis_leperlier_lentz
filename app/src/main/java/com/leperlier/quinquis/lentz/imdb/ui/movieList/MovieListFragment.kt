@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gmail.eamosse.imdb.databinding.FragmentMovieListBinding
 import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +26,8 @@ class MovieListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.moviesRecyclerView.layoutManager = LinearLayoutManager(context)
+
 
         with(movieListViewModel) {
             token.observe(viewLifecycleOwner, Observer {
