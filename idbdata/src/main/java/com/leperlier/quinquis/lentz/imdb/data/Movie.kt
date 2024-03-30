@@ -1,5 +1,9 @@
 package com.leperlier.quinquis.lentz.imdb.data
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Movie(
     val id: Long,
     val adult: Boolean,
@@ -15,4 +19,4 @@ data class Movie(
     val video: Boolean,
     val voteAverage: Double,
     val voteCount: Long
-)
+) : Parcelable

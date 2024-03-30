@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gmail.eamosse.imdb.databinding.MovieListItemBinding
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 
-class MovieAdapter(private val movies: List<Movie>) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+class MovieAdapter(private val movies: List<Movie>, private val onItemClick: (Movie) -> Unit) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     class MovieViewHolder(private val binding: MovieListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -22,7 +22,10 @@ class MovieAdapter(private val movies: List<Movie>) : RecyclerView.Adapter<Movie
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.bind(movies[position])
+        val movie = movies[position]
+        holder.itemView.setOnClickListener {
+            onItemClick(movie)
+        }
     }
 
     override fun getItemCount(): Int = movies.size
