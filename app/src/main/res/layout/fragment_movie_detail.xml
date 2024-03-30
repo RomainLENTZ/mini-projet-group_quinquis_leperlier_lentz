@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="0dp"
     tools:context=".ui.movieDetail.MovieDetailFragment">
 
     <LinearLayout
@@ -12,6 +13,14 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:id="@+id/movie_poster"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="Film image" />
+
         <TextView
             android:id="@+id/movie_title"
             android:layout_width="match_parent"
@@ -19,6 +28,8 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:padding="8dp"
+            android:layout_marginBottom="0dp"
+            android:textColor="#303030"
             tools:text="Titre du Film" />
 
         <TextView
@@ -27,9 +38,9 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:padding="8dp"
+            android:textColor="#4B4B4B"
             tools:text="Résumé du Film" />
 
-        <!-- Ajoutez plus de TextView pour les autres détails comme la date de sortie, la popularité, etc. -->
         <TextView
             android:id="@+id/movie_release_date"
             android:layout_width="match_parent"
