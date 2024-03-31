@@ -86,5 +86,19 @@ internal class OnlineDataSource @Inject constructor(private val service: MovieSe
         }
     }
 
+    suspend fun getMoviesByCategory(categoryId: Int): Result<MovieResponse> = safeCall {
+        service.getMoviesByCategory(categoryId).let { response ->
+            if (response.isSuccessful) {
+                Result.Succes(response.body()!!)
+            } else {
+                Result.Error(
+                    exception = Exception("Erreur lors de la récupération des films par genres"),
+                    message = response.message(),
+                    code = response.code()
+                )
+            }
+        }
+    }
+
 
 }

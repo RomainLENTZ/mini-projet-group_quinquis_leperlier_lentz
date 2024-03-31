@@ -39,10 +39,10 @@ class HomeFragment : Fragment() {
                 getCategories()
             })
 
-            categories.observe(viewLifecycleOwner, Observer {
-                binding.categoryList.adapter = CategoryAdapter(it, {
+            categories.observe(viewLifecycleOwner, Observer { it ->
+                binding.categoryList.adapter = CategoryAdapter(it) {
                     loadMovieListFragment(it)
-                })
+                }
             })
 
             error.observe(viewLifecycleOwner, Observer {
@@ -51,19 +51,19 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun loadMovieListFragment(category: Category){
-        val fragment = MovieListFragment() // Assurez-vous de créer une instance de votre MovieListFragment
-        // Passez des données à MovieListFragment si nécessaire, par exemple via un Bundle
+
+    fun loadMovieListFragment(category: Category) {
+        val fragment =
+            MovieListFragment()
         val bundle = Bundle().apply {
             putString("categoryName", category.name)
             putInt("categoryId", category.id)
         }
         fragment.arguments = bundle
 
-        // Réalisez la transaction de fragment
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.container, fragment) // Remplacez 'R.id.container' par l'ID de votre conteneur de fragments
-            .addToBackStack(null) // Ajoutez cette transaction à la pile arrière si vous voulez permettre à l'utilisateur de revenir en arrière
+            .replace(R.id.container, fragment)
+            .addToBackStack(null)
             .commit()
     }
 }

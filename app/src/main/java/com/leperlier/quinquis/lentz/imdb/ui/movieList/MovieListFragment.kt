@@ -21,6 +21,15 @@ class MovieListFragment : Fragment() {
     private var _binding: FragmentMovieListBinding? = null
     private val binding get() = _binding!!
 
+    private var categoryId: Int? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            categoryId = it.getInt("categoryId")
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMovieListBinding.inflate(inflater, container, false)
         return binding.root
@@ -32,7 +41,7 @@ class MovieListFragment : Fragment() {
 
         with(movieListViewModel) {
             token.observe(viewLifecycleOwner, Observer {
-                getMovies()
+                getMoviesByCategory(categoryId ?: 0)
             })
 
             movies.observe(viewLifecycleOwner, Observer { moviesList ->

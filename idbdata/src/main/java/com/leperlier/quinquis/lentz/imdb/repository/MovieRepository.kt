@@ -56,4 +56,13 @@ class MovieRepository @Inject internal constructor(
         }
     }
 
+    suspend fun getMoviesByCategory(categoryId: Int): Result<List<Movie>> {
+        return when(val result = online.getMoviesByCategory(categoryId)) {
+            is Result.Succes -> {
+                Result.Succes(result.data.results)
+            }
+            is Result.Error -> result
+        }
+    }
+
 }

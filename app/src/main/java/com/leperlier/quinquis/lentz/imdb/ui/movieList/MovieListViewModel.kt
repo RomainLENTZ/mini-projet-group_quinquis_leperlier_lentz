@@ -53,4 +53,18 @@ class MovieListViewModel @Inject constructor(private val repository: MovieReposi
             }
         }
     }
+
+    fun getMoviesByCategory(categoryId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = repository.getMoviesByCategory(categoryId)) {
+                is Result.Succes -> {
+                    _movies.postValue(result.data)
+                }
+                is Result.Error -> {
+                    _error.postValue(result.message)
+                }
+            }
+        }
+    }
+
 }
