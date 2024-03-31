@@ -74,4 +74,13 @@ class MovieRepository @Inject internal constructor(
         }
     }
 
+    suspend fun getSimilarMovies(movieId: Long): Result<List<Movie>>{
+        return when(val result = online.getSimilarMovies(movieId)) {
+            is Result.Succes -> {
+                Result.Succes(result.data.results)
+            }
+            is Result.Error -> result
+        }
+    }
+
 }

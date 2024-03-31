@@ -63,7 +63,7 @@ class HomeFragment : Fragment() {
 
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.container, fragment)
-            .addToBackStack(null)
+            .addToBackStack("goToMovieList")
             .commit()
     }
 }

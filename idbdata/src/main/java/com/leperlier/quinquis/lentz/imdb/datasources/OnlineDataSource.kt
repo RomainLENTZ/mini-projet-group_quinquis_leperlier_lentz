@@ -114,5 +114,20 @@ internal class OnlineDataSource @Inject constructor(private val service: MovieSe
         }
     }
 
+    suspend fun getSimilarMovies(movieId: Long): Result<MovieResponse> = safeCall {
+        service.getSimilarMovies(movieId).let { response ->
+            if (response.isSuccessful) {
+                Result.Succes(response.body()!!)
+            } else {
+                Result.Error(
+                    exception = Exception("Erreur lors de la récupération des films similaires"),
+                    message = response.message(),
+                    code = response.code()
+                )
+            }
+        }
+    }
+
+
 
 }

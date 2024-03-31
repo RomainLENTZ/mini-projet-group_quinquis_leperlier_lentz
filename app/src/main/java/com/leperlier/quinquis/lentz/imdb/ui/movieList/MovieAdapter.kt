@@ -2,6 +2,7 @@ package com.leperlier.quinquis.lentz.imdb.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.gmail.eamosse.imdb.databinding.MovieListItemBinding
 import com.leperlier.quinquis.lentz.imdb.data.Movie

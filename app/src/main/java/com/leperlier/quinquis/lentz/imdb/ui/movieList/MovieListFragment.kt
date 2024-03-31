@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gmail.eamosse.imdb.R
 import com.gmail.eamosse.imdb.databinding.FragmentMovieListBinding
 import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
+import com.leperlier.quinquis.lentz.imdb.ui.home.HomeFragment
 import com.leperlier.quinquis.lentz.imdb.ui.movieDetail.MovieDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,6 +42,12 @@ class MovieListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.moviesRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.movieLabel.text = categoryName
+        binding.buttonBack.setOnClickListener{
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.container, HomeFragment())
+                .addToBackStack("backToHome")
+                .commit()
+        }
 
         with(movieListViewModel) {
             token.observe(viewLifecycleOwner, Observer {
@@ -56,7 +63,7 @@ class MovieListFragment : Fragment() {
                     }
                     requireActivity().supportFragmentManager.beginTransaction()
                         .replace(R.id.container, movieDetailFragment)
-                        .addToBackStack(null)
+                        .addToBackStack("goToMovieDetails")
                         .commit()
                 }
             })
