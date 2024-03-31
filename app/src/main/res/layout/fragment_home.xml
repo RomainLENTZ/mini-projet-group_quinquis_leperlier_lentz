@@ -4,18 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context="com.leperlier.quinquis.lentz.imdb.ui.home.HomeFragment">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Movies"
+        android:textStyle="bold"
+        android:textSize="40sp"
+        android:textColor="#303030"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="0dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        />
+
+    <TextView
+        android:id="@+id/category_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Categories"
+        android:textStyle="normal"
+        android:textSize="20sp"
+        android:textColor="#4B4B4B"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        android:layout_marginTop="20dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/category_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/category_title"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:spanCount="4"
         tools:listitem="@layout/category_list_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
