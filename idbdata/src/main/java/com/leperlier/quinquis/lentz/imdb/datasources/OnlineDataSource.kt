@@ -1,5 +1,6 @@
 package com.leperlier.quinquis.lentz.imdb.datasources
 
+import MovieResponse
 import com.leperlier.quinquis.lentz.imdb.api.response.toToken
 import com.leperlier.quinquis.lentz.imdb.api.service.MovieService
 import com.leperlier.quinquis.lentz.imdb.data.Token
@@ -70,4 +71,63 @@ internal class OnlineDataSource @Inject constructor(private val service: MovieSe
             }
         }
     }
+
+    suspend fun getWeekTrendingMovies(): Result<MovieResponse> = safeCall {
+        service.getWeekTrendingMovies().let { response ->
+            if (response.isSuccessful) {
+                Result.Succes(response.body()!!)
+            } else {
+                Result.Error(
+                    exception = Exception("Erreur lors de la récupération des films par genres"),
+                    message = response.message(),
+                    code = response.code()
+                )
+            }
+        }
+    }
+
+    suspend fun getDayTrendingMovies(): Result<MovieResponse> = safeCall {
+        service.getDayTrendingMovies().let { response ->
+            if (response.isSuccessful) {
+                Result.Succes(response.body()!!)
+            } else {
+                Result.Error(
+                    exception = Exception("Erreur lors de la récupération des films par genres"),
+                    message = response.message(),
+                    code = response.code()
+                )
+            }
+        }
+    }
+
+    suspend fun getMoviesByCategory(categoryId: Int): Result<MovieResponse> = safeCall {
+        service.getMoviesByCategory(categoryId).let { response ->
+            if (response.isSuccessful) {
+                Result.Succes(response.body()!!)
+            } else {
+                Result.Error(
+                    exception = Exception("Erreur lors de la récupération des films par genres"),
+                    message = response.message(),
+                    code = response.code()
+                )
+            }
+        }
+    }
+
+    suspend fun getSimilarMovies(movieId: Long): Result<MovieResponse> = safeCall {
+        service.getSimilarMovies(movieId).let { response ->
+            if (response.isSuccessful) {
+                Result.Succes(response.body()!!)
+            } else {
+                Result.Error(
+                    exception = Exception("Erreur lors de la récupération des films similaires"),
+                    message = response.message(),
+                    code = response.code()
+                )
+            }
+        }
+    }
+
+
+
 }

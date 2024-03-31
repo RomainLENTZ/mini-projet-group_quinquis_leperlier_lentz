@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.gmail.eamosse.imdb.R
 import com.gmail.eamosse.imdb.databinding.FragmentHomeBinding
 import com.gmail.eamosse.imdb.ui.home.HomeViewModel
+import com.leperlier.quinquis.lentz.imdb.data.Category
+import com.leperlier.quinquis.lentz.imdb.ui.movieList.MovieListFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,13 +39,31 @@ class HomeFragment : Fragment() {
                 getCategories()
             })
 
-            categories.observe(viewLifecycleOwner, Observer {
-                binding.categoryList.adapter = CategoryAdapter(it)
+            categories.observe(viewLifecycleOwner, Observer { it ->
+                binding.categoryList.adapter = CategoryAdapter(it) {
+                    loadMovieListFragment(it)
+                }
             })
 
             error.observe(viewLifecycleOwner, Observer {
                 //afficher l'erreur
             })
         }
+    }
+
+
+    fun loadMovieListFragment(category: Category) {
+        val fragment =
+            MovieListFragment()
+        val bundle = Bundle().apply {
+            putString("categoryName", category.name)
+            putInt("categoryId", category.id)
+        }
+        fragment.arguments = bundle
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.container, fragment)
+            .addToBackStack("goToMovieList")
+            .commit()
     }
 }
