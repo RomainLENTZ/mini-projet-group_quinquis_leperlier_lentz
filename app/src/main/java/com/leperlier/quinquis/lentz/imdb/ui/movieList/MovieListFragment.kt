@@ -22,11 +22,13 @@ class MovieListFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var categoryId: Int? = null
+    private var categoryName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             categoryId = it.getInt("categoryId")
+            categoryName = it.getString("categoryName")
         }
     }
 
@@ -38,6 +40,7 @@ class MovieListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.moviesRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.movieLabel.text = categoryName
 
         with(movieListViewModel) {
             token.observe(viewLifecycleOwner, Observer {

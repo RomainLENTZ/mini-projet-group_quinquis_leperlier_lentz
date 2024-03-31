@@ -4,18 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginEnd="2dp"
-    android:layout_marginStart="2dp">
+    android:layout_marginTop="20dp"
+    android:layout_marginEnd="0dp"
+    android:layout_marginStart="0dp">
 
     <TextView
         android:id="@+id/movie_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Movies"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        android:textColor="#303030"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/moviesRecyclerView"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="0dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         />
 

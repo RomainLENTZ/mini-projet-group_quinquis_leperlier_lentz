@@ -4,7 +4,8 @@
         android:id="@+id/movieName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:padding="12dp"
         android:text="@string/movie_name"
+        android:textColor="#4B4B4B"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 </layout>
