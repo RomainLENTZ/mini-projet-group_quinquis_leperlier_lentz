@@ -1,13 +1,13 @@
-package com.gmail.eamosse.imdb.ui.dashboard
+package com.leperlier.quinquis.lentz.imdb.ui.menu.about
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class DashboardViewModel : ViewModel() {
+class AboutViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is dashboard Fragment"
+        value = "This is about Fragment"
     }
     val text: LiveData<String> = _text
 }
