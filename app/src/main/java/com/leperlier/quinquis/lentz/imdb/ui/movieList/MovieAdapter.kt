@@ -11,8 +11,11 @@ class MovieAdapter(private val movies: List<Movie>, private val onItemClick: (Mo
 
     class MovieViewHolder(val binding: MovieListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(movie: Movie) {
+        fun bind(movie: Movie, onItemClick: (Movie) -> Unit) {
             binding.movieName.text = movie.title
+            binding.root.setOnClickListener {
+                onItemClick(movie)
+            }
         }
     }
 
@@ -24,10 +27,7 @@ class MovieAdapter(private val movies: List<Movie>, private val onItemClick: (Mo
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val movie = movies[position]
-        holder.binding.movieName.text = movie.title
-        holder.itemView.setOnClickListener {
-            onItemClick(movie)
-        }
+        holder.bind(movie, onItemClick) // Incluez ici le onItemClick pour gérer le clic sur chaque élément
     }
 
     override fun getItemCount(): Int = movies.size
