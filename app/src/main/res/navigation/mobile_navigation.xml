@@ -15,7 +15,7 @@
         android:id="@+id/navigation_trending"
         android:name="com.leperlier.quinquis.lentz.imdb.ui.menu.trending.TrendingFragment"
         android:label="@string/title_trending"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_about" />
 
     <fragment
         android:id="@+id/navigation_about"
