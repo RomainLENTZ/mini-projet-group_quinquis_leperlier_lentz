@@ -28,8 +28,11 @@ class HomeViewModel @Inject constructor(private val repository: MovieRepository)
     val error: LiveData<String>
         get() = _error
 
-    private val _trendingMovies: MutableLiveData<List<Movie>> = MutableLiveData()
-    val trendingMovies: LiveData<List<Movie>> get() = _trendingMovies
+    private val _trendingDayMovies: MutableLiveData<List<Movie>> = MutableLiveData()
+    val trendingDayMovies: LiveData<List<Movie>> get() = _trendingDayMovies
+
+    private val _trendingWeekMovies: MutableLiveData<List<Movie>> = MutableLiveData()
+    val trendingWeekMovies: LiveData<List<Movie>> get() = _trendingWeekMovies
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -60,7 +63,16 @@ class HomeViewModel @Inject constructor(private val repository: MovieRepository)
     fun getDayTrendingMovies() {
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = repository.getDayTrendingMovies()) {
-                is Result.Succes -> _trendingMovies.postValue(result.data)
+                is Result.Succes -> _trendingDayMovies.postValue(result.data)
+                is Result.Error -> _error.postValue(result.message)
+            }
+        }
+    }
+
+    fun getWeekTrendingMovies() {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = repository.getWeekTrendingMovies()) {
+                is Result.Succes -> _trendingWeekMovies.postValue(result.data)
                 is Result.Error -> _error.postValue(result.message)
             }
         }

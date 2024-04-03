@@ -14,6 +14,7 @@ import com.gmail.eamosse.imdb.ui.home.HomeViewModel
 import com.leperlier.quinquis.lentz.imdb.data.Category
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
+import com.leperlier.quinquis.lentz.imdb.ui.movieDetail.MovieDetailFragment
 import com.leperlier.quinquis.lentz.imdb.ui.movieList.MovieListFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,9 +38,13 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupRecyclerViews()
+
         with(homeViewModel) {
             token.observe(viewLifecycleOwner, Observer {
                 getCategories()
+                getDayTrendingMovies()
+                getWeekTrendingMovies()
             })
 
             categories.observe(viewLifecycleOwner, Observer { categories ->
@@ -48,27 +53,51 @@ class HomeFragment : Fragment() {
                 }
             })
 
+            trendingDayMovies.observe(viewLifecycleOwner, Observer { trendingDayMovies ->
+                (binding.trendingDayMovieList.adapter as MovieAdapter).updateMovies(trendingDayMovies)
+            })
+
+            trendingWeekMovies.observe(viewLifecycleOwner, Observer { weekTrendingMovies ->
+                (binding.trendingWeekMovieList.adapter as MovieAdapter).updateMovies(weekTrendingMovies)
+            })
+
             error.observe(viewLifecycleOwner, Observer {
                 // Afficher l'erreur
             })
         }
+    }
 
-        homeViewModel.getDayTrendingMovies() // Appel pour charger les films tendance
-        homeViewModel.trendingMovies.observe(viewLifecycleOwner, Observer { trendingMovies ->
-            setupTrendingMoviesRecyclerView(trendingMovies)
-        })
+    private fun setupRecyclerViews() {
+        binding.trendingDayMovieList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.trendingDayMovieList.adapter = MovieAdapter(listOf()) { movie ->
+            openMovieDetailFragment(movie)
+        }
 
+        binding.trendingWeekMovieList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.trendingWeekMovieList.adapter = MovieAdapter(listOf()) { movie ->
+            openMovieDetailFragment(movie)
+        }
     }
 
     private fun setupTrendingMoviesRecyclerView(trendingMovies: List<Movie>) {
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.trendingMoviesRecyclerView.layoutManager = layoutManager
+        binding.trendingDayMovieList.layoutManager = layoutManager
 
-        // Si vous créez un nouvel adapter à chaque fois, c'est correct
         val moviesAdapter = MovieAdapter(trendingMovies) { movie ->
-            // Action lors du clic sur un film
+            openMovieDetailFragment(movie)
         }
-        binding.trendingMoviesRecyclerView.adapter = moviesAdapter
+        binding.trendingWeekMovieList.adapter = moviesAdapter
+    }
+    private fun openMovieDetailFragment(movie: Movie) {
+        val fragment = MovieDetailFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable("movie", movie)
+            }
+        }
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
 
