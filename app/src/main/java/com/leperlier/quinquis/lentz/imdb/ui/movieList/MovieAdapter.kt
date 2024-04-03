@@ -7,12 +7,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gmail.eamosse.imdb.databinding.MovieListItemBinding
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 
-class MovieAdapter(private val movies: List<Movie>, private val onItemClick: (Movie) -> Unit) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+class MovieAdapter(private var movies: List<Movie>, private val onItemClick: (Movie) -> Unit) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     class MovieViewHolder(val binding: MovieListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(movie: Movie) {
+        fun bind(movie: Movie, onItemClick: (Movie) -> Unit) {
             binding.movieName.text = movie.title
+            binding.root.setOnClickListener {
+                onItemClick(movie)
+            }
         }
     }
 
@@ -24,10 +27,12 @@ class MovieAdapter(private val movies: List<Movie>, private val onItemClick: (Mo
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val movie = movies[position]
-        holder.binding.movieName.text = movie.title
-        holder.itemView.setOnClickListener {
-            onItemClick(movie)
-        }
+        holder.bind(movie, onItemClick)
+    }
+
+    fun updateMovies(movies: List<Movie>) {
+        this.movies = movies
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = movies.size

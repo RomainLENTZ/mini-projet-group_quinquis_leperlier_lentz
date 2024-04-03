@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.leperlier.quinquis.lentz.imdb.data.Category
+import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.Token
 import com.leperlier.quinquis.lentz.imdb.repository.MovieRepository
 import com.leperlier.quinquis.lentz.imdb.utils.Result
@@ -26,6 +27,12 @@ class HomeViewModel @Inject constructor(private val repository: MovieRepository)
     private val _error: MutableLiveData<String> = MutableLiveData()
     val error: LiveData<String>
         get() = _error
+
+    private val _trendingDayMovies: MutableLiveData<List<Movie>> = MutableLiveData()
+    val trendingDayMovies: LiveData<List<Movie>> get() = _trendingDayMovies
+
+    private val _trendingWeekMovies: MutableLiveData<List<Movie>> = MutableLiveData()
+    val trendingWeekMovies: LiveData<List<Movie>> get() = _trendingWeekMovies
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -49,6 +56,24 @@ class HomeViewModel @Inject constructor(private val repository: MovieRepository)
                 is Result.Error -> {
                     _error.postValue(result.message)
                 }
+            }
+        }
+    }
+
+    fun getDayTrendingMovies() {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = repository.getDayTrendingMovies()) {
+                is Result.Succes -> _trendingDayMovies.postValue(result.data)
+                is Result.Error -> _error.postValue(result.message)
+            }
+        }
+    }
+
+    fun getWeekTrendingMovies() {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = repository.getWeekTrendingMovies()) {
+                is Result.Succes -> _trendingWeekMovies.postValue(result.data)
+                is Result.Error -> _error.postValue(result.message)
             }
         }
     }
