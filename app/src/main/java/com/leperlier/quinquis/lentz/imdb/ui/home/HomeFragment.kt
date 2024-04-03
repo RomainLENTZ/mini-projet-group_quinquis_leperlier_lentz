@@ -10,11 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gmail.eamosse.imdb.R
 import com.gmail.eamosse.imdb.databinding.FragmentHomeBinding
-import com.gmail.eamosse.imdb.ui.home.HomeViewModel
 import com.leperlier.quinquis.lentz.imdb.data.Category
-import com.leperlier.quinquis.lentz.imdb.data.Movie
-import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
-import com.leperlier.quinquis.lentz.imdb.ui.movieDetail.MovieDetailFragment
 import com.leperlier.quinquis.lentz.imdb.ui.movieList.MovieListFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,95 +20,47 @@ class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var binding: FragmentHomeBinding
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupRecyclerViews()
+        // Configuration initiale des RecyclerViews pour les catégories
+        setupCategoryRecyclerView()
 
-        with(homeViewModel) {
-            token.observe(viewLifecycleOwner, Observer {
-                getCategories()
-                getDayTrendingMovies()
-                getWeekTrendingMovies()
-            })
+        homeViewModel.token.observe(viewLifecycleOwner, Observer {
+            homeViewModel.getCategories()
+        })
 
-            categories.observe(viewLifecycleOwner, Observer { categories ->
-                binding.categoryList.adapter = CategoryAdapter(categories) { category ->
-                    loadMovieListFragment(category)
-                }
-            })
+        homeViewModel.categories.observe(viewLifecycleOwner, Observer { categories ->
+            (binding.categoryList.adapter as CategoryAdapter).updateCategories(categories)
+        })
 
-            trendingDayMovies.observe(viewLifecycleOwner, Observer { trendingDayMovies ->
-                (binding.trendingDayMovieList.adapter as MovieAdapter).updateMovies(trendingDayMovies)
-            })
+        homeViewModel.error.observe(viewLifecycleOwner, Observer {
+            // Afficher l'erreur
+        })
+    }
 
-            trendingWeekMovies.observe(viewLifecycleOwner, Observer { weekTrendingMovies ->
-                (binding.trendingWeekMovieList.adapter as MovieAdapter).updateMovies(weekTrendingMovies)
-            })
-
-            error.observe(viewLifecycleOwner, Observer {
-                // Afficher l'erreur
-            })
+    private fun setupCategoryRecyclerView() {
+        binding.categoryList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.categoryList.adapter = CategoryAdapter(listOf()) { category ->
+            loadMovieListFragment(category)
         }
     }
 
-    private fun setupRecyclerViews() {
-        binding.trendingDayMovieList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.trendingDayMovieList.adapter = MovieAdapter(listOf()) { movie ->
-            openMovieDetailFragment(movie)
-        }
-
-        binding.trendingWeekMovieList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.trendingWeekMovieList.adapter = MovieAdapter(listOf()) { movie ->
-            openMovieDetailFragment(movie)
-        }
-    }
-
-    private fun setupTrendingMoviesRecyclerView(trendingMovies: List<Movie>) {
-        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.trendingDayMovieList.layoutManager = layoutManager
-
-        val moviesAdapter = MovieAdapter(trendingMovies) { movie ->
-            openMovieDetailFragment(movie)
-        }
-        binding.trendingWeekMovieList.adapter = moviesAdapter
-    }
-    private fun openMovieDetailFragment(movie: Movie) {
-        val fragment = MovieDetailFragment().apply {
+    fun loadMovieListFragment(category: Category) {
+        val fragment = MovieListFragment().apply {
             arguments = Bundle().apply {
-                putParcelable("movie", movie)
+                putString("categoryName", category.name)
+                putInt("categoryId", category.id)
             }
         }
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.container, fragment)
             .addToBackStack(null)
-            .commit()
-    }
-
-
-    fun loadMovieListFragment(category: Category) {
-        val fragment =
-            MovieListFragment()
-        val bundle = Bundle().apply {
-            putString("categoryName", category.name)
-            putInt("categoryId", category.id)
-        }
-        fragment.arguments = bundle
-
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.container, fragment)
-            .addToBackStack("goToMovieList")
             .commit()
     }
 }

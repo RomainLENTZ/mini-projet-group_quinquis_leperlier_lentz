@@ -1,4 +1,4 @@
-package com.gmail.eamosse.imdb.ui.home
+package com.leperlier.quinquis.lentz.imdb.ui.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -56,24 +56,6 @@ class HomeViewModel @Inject constructor(private val repository: MovieRepository)
                 is Result.Error -> {
                     _error.postValue(result.message)
                 }
-            }
-        }
-    }
-
-    fun getDayTrendingMovies() {
-        viewModelScope.launch(Dispatchers.IO) {
-            when (val result = repository.getDayTrendingMovies()) {
-                is Result.Succes -> _trendingDayMovies.postValue(result.data)
-                is Result.Error -> _error.postValue(result.message)
-            }
-        }
-    }
-
-    fun getWeekTrendingMovies() {
-        viewModelScope.launch(Dispatchers.IO) {
-            when (val result = repository.getWeekTrendingMovies()) {
-                is Result.Succes -> _trendingWeekMovies.postValue(result.data)
-                is Result.Error -> _error.postValue(result.message)
             }
         }
     }

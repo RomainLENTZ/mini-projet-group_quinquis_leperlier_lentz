@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide
 import com.gmail.eamosse.imdb.databinding.CategoryListItemBinding
 import com.leperlier.quinquis.lentz.imdb.data.Category
 
-class CategoryAdapter(private val items: List<Category>, private val onItemClick: (Category) -> Unit) :
+class CategoryAdapter(private var items: List<Category>, private val onItemClick: (Category) -> Unit) :
     RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: CategoryListItemBinding) :
@@ -32,5 +32,10 @@ class CategoryAdapter(private val items: List<Category>, private val onItemClick
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
+    }
+
+    fun updateCategories(newCategories: List<Category>) {
+        items = newCategories
+        notifyDataSetChanged() // Notifie le RecyclerView que les données ont changé et qu'il doit se rafraîchir
     }
 }
