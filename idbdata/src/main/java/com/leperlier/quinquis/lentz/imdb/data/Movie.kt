@@ -3,6 +3,11 @@ package com.leperlier.quinquis.lentz.imdb.data
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
+enum class MovieDesignType {
+    HORIZONTAL,
+    VERTICAL
+}
+
 @Parcelize
 data class Movie(
     val id: Long,
@@ -18,5 +23,6 @@ data class Movie(
     val title: String,
     val video: Boolean,
     val vote_average: Double,
-    val vote_count: Long
+    val vote_count: Long,
+    val type: MovieDesignType
 ) : Parcelable

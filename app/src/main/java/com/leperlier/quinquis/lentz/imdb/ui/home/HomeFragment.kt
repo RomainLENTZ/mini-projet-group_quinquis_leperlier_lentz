@@ -36,7 +36,7 @@ class HomeFragment : Fragment() {
         })
 
         homeViewModel.categories.observe(viewLifecycleOwner, Observer { categories ->
-            (binding.categoryList.adapter as CategoryAdapter).updateCategories(categories)
+            (binding.categoryList.adapter as MovieHorizontalAdapter).updateCategories(categories)
         })
 
         homeViewModel.error.observe(viewLifecycleOwner, Observer {
@@ -46,7 +46,7 @@ class HomeFragment : Fragment() {
 
     private fun setupCategoryRecyclerView() {
         binding.categoryList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.categoryList.adapter = CategoryAdapter(listOf()) { category ->
+        binding.categoryList.adapter = MovieHorizontalAdapter(listOf()) { category ->
             loadMovieListFragment(category)
         }
     }
