@@ -24,6 +24,9 @@ internal interface MovieService {
     @GET("discover/movie")
     suspend fun getMoviesByCategory(@Query("with_genres") categoryId: Int): Response<MovieResponse>
 
+    @GET("discover/movie")
+    suspend fun getMoviesByAuthor(@Query("with_people") authorId: Int): Response<MovieResponse>
+
     @GET("movie/{movie_id}/similar")
     suspend fun getSimilarMovies(@Path("movie_id") movieId: Long): Response<MovieResponse>
 }

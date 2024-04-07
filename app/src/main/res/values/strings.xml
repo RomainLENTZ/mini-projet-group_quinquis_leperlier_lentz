@@ -15,4 +15,6 @@
     <string name="today_trending">Today\'s trending</string>
     <string name="movies">Movies</string>
     <string name="categories">Categories</string>
+    <string name="author">Authors</string>
+    <string name="series">Series</string>
 </resources>
