@@ -26,7 +26,7 @@ Techniquement, ce projet devrait vous permettre d'expérimenter de manière plus
 ### Obligatoires
 Pour être acceptable, votre application doit proposer les fonctionnalités suivantes
 - [x] Catégories de films
-- [ ] Catégories de séries
+- [X] Catégories de séries
 - [x] Liste des films par catégories
 - [ ] Liste des films par auteurs
 - [x] Détails des films
