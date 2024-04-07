@@ -25,13 +25,17 @@ Techniquement, ce projet devrait vous permettre d'expérimenter de manière plus
 ## Fonctionnalités attendues
 ### Obligatoires
 Pour être acceptable, votre application doit proposer les fonctionnalités suivantes
-- Catégories de films/séries
-- Liste des films par catégories et auteurs
-- Détails des films et séries
-- Films et séries à la une
-- Visualiser la bande annonce d'un film ou d'une série
-- Liste de films et séries en favoris (géré dans une base de données locale)
-- Une vue A propos contenant les fonctionalités de l'application, le profile LinkedIn des membres du groupe, le listing des librairies utilisées, ...
+- [x] Catégories de films
+- [ ] Catégories de séries
+- [x] Liste des films par catégories
+- [ ] Liste des films par auteurs
+- [x] Détails des films
+- [ ] Détails des séries
+- [x] Films à la une
+- [ ] Séries à la une
+- [ ] Visualiser la bande annonce d'un film ou d'une série
+- [ ] Liste de films et séries en favoris (géré dans une base de données locale)
+- [x] Une vue A propos contenant les fonctionalités de l'application, le profile LinkedIn des membres du groupe, le listing des librairies utilisées, ...
 
 ### Optionnels
 Pour être complète, votre application doit proposer au moins une parmi les fonctionnalités suivantes :
