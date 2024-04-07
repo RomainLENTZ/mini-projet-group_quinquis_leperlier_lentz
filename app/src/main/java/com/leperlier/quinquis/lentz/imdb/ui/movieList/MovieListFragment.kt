@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gmail.eamosse.imdb.R
 import com.gmail.eamosse.imdb.databinding.FragmentMovieListBinding
+import com.leperlier.quinquis.lentz.imdb.data.MovieDesignType
 import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
 import com.leperlier.quinquis.lentz.imdb.ui.home.HomeFragment
 import com.leperlier.quinquis.lentz.imdb.ui.movieDetail.MovieDetailFragment
@@ -55,7 +56,7 @@ class MovieListFragment : Fragment() {
             })
 
             movies.observe(viewLifecycleOwner, Observer { moviesList ->
-                binding.moviesRecyclerView.adapter = MovieAdapter(moviesList) { movie ->
+                binding.moviesRecyclerView.adapter = MovieAdapter(moviesList, { movie ->
                     val movieDetailFragment = MovieDetailFragment().apply {
                         arguments = Bundle().apply {
                             putParcelable("movie", movie)
@@ -65,7 +66,7 @@ class MovieListFragment : Fragment() {
                         .replace(R.id.container, movieDetailFragment)
                         .addToBackStack("goToMovieDetails")
                         .commit()
-                }
+                }, MovieDesignType.VERTICAL)
             })
 
             error.observe(viewLifecycleOwner, Observer {
