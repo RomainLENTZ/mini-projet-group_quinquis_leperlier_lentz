@@ -1,6 +1,7 @@
 package com.leperlier.quinquis.lentz.imdb.datasources
 
 import MovieResponse
+import SeriesResponse
 import com.leperlier.quinquis.lentz.imdb.api.response.toToken
 import com.leperlier.quinquis.lentz.imdb.api.service.MovieService
 import com.leperlier.quinquis.lentz.imdb.api.service.SerieService
@@ -66,6 +67,20 @@ internal class OnlineSeriesDataSource @Inject constructor(private val service: S
             } else {
                 Result.Error(
                     exception = Exception("Erreur lors de la récupération des catégories"),
+                    message = response.message(),
+                    code = response.code()
+                )
+            }
+        }
+    }
+
+    suspend fun getSeriesByCategory(categoryId: Int): Result<SeriesResponse> = safeCall {
+        service.getSeriesByCategory(categoryId).let { response ->
+            if (response.isSuccessful) {
+                Result.Succes(response.body()!!)
+            } else {
+                Result.Error(
+                    exception = Exception("Erreur lors de la récupération des séries par genres"),
                     message = response.message(),
                     code = response.code()
                 )
