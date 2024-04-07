@@ -1,7 +1,6 @@
 package com.leperlier.quinquis.lentz.imdb.api.service
 
 import CategoryResponse
-import MovieResponse
 import SeriesResponse
 import com.leperlier.quinquis.lentz.imdb.api.response.TokenResponse
 import retrofit2.Response
