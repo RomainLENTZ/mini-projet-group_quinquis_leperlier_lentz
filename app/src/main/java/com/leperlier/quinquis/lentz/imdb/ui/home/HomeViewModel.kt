@@ -8,6 +8,7 @@ import com.leperlier.quinquis.lentz.imdb.data.Category
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.Token
 import com.leperlier.quinquis.lentz.imdb.repository.MovieRepository
+import com.leperlier.quinquis.lentz.imdb.repository.SerieRepository
 import com.leperlier.quinquis.lentz.imdb.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,10 +16,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val repository: MovieRepository) : ViewModel() {
+class HomeViewModel @Inject constructor(private val movieRepository: MovieRepository, private val serieRepository: SerieRepository) : ViewModel() {
 
-    private val _categories: MutableLiveData<List<Category>> = MutableLiveData()
-    val categories: LiveData<List<Category>> get() = _categories
+    private val _movieCategories: MutableLiveData<List<Category>> = MutableLiveData()
+    val movieCategories: LiveData<List<Category>> get() = _movieCategories
+
+    private val _serieCategories: MutableLiveData<List<Category>> = MutableLiveData()
+    val serieCategories: LiveData<List<Category>> get() = _serieCategories
 
     private val _token: MutableLiveData<Token> = MutableLiveData()
     val token: LiveData<Token>
@@ -36,7 +40,7 @@ class HomeViewModel @Inject constructor(private val repository: MovieRepository)
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = repository.getToken()) {
+            when (val result = movieRepository.getToken()) {
                 is Result.Succes -> {
                     _token.postValue(result.data)
                 }
@@ -47,11 +51,24 @@ class HomeViewModel @Inject constructor(private val repository: MovieRepository)
         }
     }
 
-    fun getCategories() {
+    fun getMovieCategories() {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = repository.getCategories()) {
+            when (val result = movieRepository.getCategories()) {
                 is Result.Succes -> {
-                    _categories.postValue(result.data)
+                    _movieCategories.postValue(result.data)
+                }
+                is Result.Error -> {
+                    _error.postValue(result.message)
+                }
+            }
+        }
+    }
+
+    fun getSerieCategories() {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = serieRepository.getCategories()) {
+                is Result.Succes -> {
+                    _serieCategories.postValue(result.data)
                 }
                 is Result.Error -> {
                     _error.postValue(result.message)
