@@ -3,14 +3,13 @@ package com.leperlier.quinquis.lentz.imdb.ui.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.gmail.eamosse.imdb.databinding.CategoryListItemBinding
+import com.gmail.eamosse.imdb.databinding.MovieHorizontalItemBinding
 import com.leperlier.quinquis.lentz.imdb.data.Category
 
-class CategoryAdapter(private var items: List<Category>, private val onItemClick: (Category) -> Unit) :
-    RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+class MovieHorizontalAdapter(private var items: List<Category>, private val onItemClick: (Category) -> Unit) :
+    RecyclerView.Adapter<MovieHorizontalAdapter.ViewHolder>() {
 
-    inner class ViewHolder(private val binding: CategoryListItemBinding) :
+    inner class ViewHolder(private val binding: MovieHorizontalItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -19,13 +18,13 @@ class CategoryAdapter(private var items: List<Category>, private val onItemClick
             }
         }
         fun bind(item: Category) {
-            binding.categoryName.text = item.name
+            binding.movieName.text = item.name
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return ViewHolder(CategoryListItemBinding.inflate(inflater, parent, false))
+        return ViewHolder(MovieHorizontalItemBinding.inflate(inflater, parent, false))
     }
 
     override fun getItemCount(): Int = items.size
