@@ -8,7 +8,9 @@ import com.gmail.eamosse.imdb.databinding.MovieVerticalItemBinding
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.MovieDesignType
 
-class MovieAdapter(private var movies: List<Movie>, private val onItemClick: (Movie) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MovieAdapter(private var movies: List<Movie>,
+                   private val onItemClick: (Movie) -> Unit,
+                   private val designType: MovieDesignType) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class MovieViewHolderHorizontal(val binding: MovieHorizontalItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: Movie, onItemClick: (Movie) -> Unit) {
@@ -30,16 +32,15 @@ class MovieAdapter(private var movies: List<Movie>, private val onItemClick: (Mo
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return when (viewType) {
-            MovieDesignType.HORIZONTAL.ordinal -> {
+        return when (designType) {
+            MovieDesignType.HORIZONTAL -> {
                 val binding = MovieHorizontalItemBinding.inflate(inflater, parent, false)
                 MovieViewHolderHorizontal(binding)
             }
-            MovieDesignType.VERTICAL.ordinal -> {
+            MovieDesignType.VERTICAL -> {
                 val binding = MovieVerticalItemBinding.inflate(inflater, parent, false)
                 MovieViewHolderVertical(binding)
             }
-            else -> throw IllegalArgumentException("Invalid design type")
         }
     }
 
@@ -52,7 +53,7 @@ class MovieAdapter(private var movies: List<Movie>, private val onItemClick: (Mo
     }
 
     override fun getItemViewType(position: Int): Int {
-        return MovieDesignType.HORIZONTAL.ordinal
+        return designType.ordinal
     }
 
     fun updateMovies(movies: List<Movie>) {

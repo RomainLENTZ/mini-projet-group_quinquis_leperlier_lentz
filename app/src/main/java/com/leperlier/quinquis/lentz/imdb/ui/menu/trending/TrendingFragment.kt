@@ -13,6 +13,7 @@ import com.gmail.eamosse.imdb.R
 import com.gmail.eamosse.imdb.databinding.FragmentHomeBinding
 import com.gmail.eamosse.imdb.databinding.FragmentTrendingBinding
 import com.leperlier.quinquis.lentz.imdb.data.Movie
+import com.leperlier.quinquis.lentz.imdb.data.MovieDesignType
 import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
 import com.leperlier.quinquis.lentz.imdb.ui.movieDetail.MovieDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,16 +46,16 @@ class TrendingFragment : Fragment() {
     private fun setupRecyclerViews() {
         binding.trendingDayMovieList.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = MovieAdapter(listOf()) { movie ->
+            adapter = MovieAdapter(listOf(), { movie ->
                 openMovieDetailFragment(movie)
-            }
+            }, MovieDesignType.HORIZONTAL)
         }
 
         binding.trendingWeekMovieList.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = MovieAdapter(listOf()) { movie ->
+            adapter = MovieAdapter(listOf(), { movie ->
                 openMovieDetailFragment(movie)
-            }
+            }, MovieDesignType.HORIZONTAL)
         }
     }
 

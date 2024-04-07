@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gmail.eamosse.imdb.databinding.FragmentMovieDetailBinding
 import com.leperlier.quinquis.lentz.imdb.data.Movie
+import com.leperlier.quinquis.lentz.imdb.data.MovieDesignType
 import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
 import com.leperlier.quinquis.lentz.imdb.ui.movieList.MovieListViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,7 +56,7 @@ class MovieDetailFragment : Fragment() {
             })
 
             similarMovies.observe(viewLifecycleOwner, Observer { moviesList ->
-                binding.similarMovieRecyclerView.adapter = MovieAdapter(moviesList) { movie ->
+                binding.similarMovieRecyclerView.adapter = MovieAdapter(moviesList, { movie ->
                     val movieDetailFragment = MovieDetailFragment().apply {
                         arguments = Bundle().apply {
                             putParcelable("movie", movie)
@@ -65,7 +66,7 @@ class MovieDetailFragment : Fragment() {
                         .replace(com.gmail.eamosse.imdb.R.id.container, movieDetailFragment)
                         .addToBackStack("goToMovieDetails")
                         .commit()
-                }
+                }, MovieDesignType.VERTICAL)
             })
 
             error.observe(viewLifecycleOwner, Observer {
