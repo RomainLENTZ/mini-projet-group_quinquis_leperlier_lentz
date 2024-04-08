@@ -101,4 +101,33 @@ internal class OnlineSeriesDataSource @Inject constructor(private val service: S
             }
         }
     }
+
+    suspend fun getWeekTrendingSeries(): Result<SeriesResponse> = safeCall {
+        service.getWeekTrendingSeries().let { response ->
+            if (response.isSuccessful) {
+                Result.Succes(response.body()!!)
+            } else {
+                Result.Error(
+                    exception = Exception("Erreur lors de la récupération des films par genres"),
+                    message = response.message(),
+                    code = response.code()
+                )
+            }
+        }
+    }
+
+    suspend fun getDayTrendingSeries(): Result<SeriesResponse> = safeCall {
+        service.getDayTrendingSeries().let { response ->
+            if (response.isSuccessful) {
+                Result.Succes(response.body()!!)
+            } else {
+                Result.Error(
+                    exception = Exception("Erreur lors de la récupération des films par genres"),
+                    message = response.message(),
+                    code = response.code()
+                )
+            }
+        }
+    }
+
 }

@@ -66,4 +66,22 @@ class SerieRepository @Inject internal constructor(
         }
     }
 
+    suspend fun getDayTrendingSeries(): Result<List<Serie>>{
+        return when(val result = online.getDayTrendingSeries()) {
+            is Result.Succes -> {
+                Result.Succes(result.data.results)
+            }
+            is Result.Error -> result
+        }
+    }
+
+    suspend fun getWeekTrendingSeries(): Result<List<Serie>>{
+        return when(val result = online.getWeekTrendingSeries()) {
+            is Result.Succes -> {
+                Result.Succes(result.data.results)
+            }
+            is Result.Error -> result
+        }
+    }
+
 }
