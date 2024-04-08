@@ -81,6 +81,23 @@
             tools:text="Note Moyenne" />
 
         <TextView
+            android:id="@+id/streaming_services_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Disponible sur"
+            android:textSize="18sp"
+            android:padding="8dp"
+            android:textStyle="bold"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/streaming_services_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        <TextView
             android:id="@+id/similar_movie_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

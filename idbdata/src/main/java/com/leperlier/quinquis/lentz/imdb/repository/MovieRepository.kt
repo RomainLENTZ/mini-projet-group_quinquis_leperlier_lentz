@@ -2,6 +2,7 @@ package com.leperlier.quinquis.lentz.imdb.repository
 
 import com.leperlier.quinquis.lentz.imdb.data.Category
 import com.leperlier.quinquis.lentz.imdb.data.Movie
+import com.leperlier.quinquis.lentz.imdb.data.Provider
 import com.leperlier.quinquis.lentz.imdb.data.Token
 import com.leperlier.quinquis.lentz.imdb.datasources.LocalDataSource
 import com.leperlier.quinquis.lentz.imdb.datasources.OnlineDataSource
@@ -81,6 +82,10 @@ class MovieRepository @Inject internal constructor(
             }
             is Result.Error -> result
         }
+    }
+
+    suspend fun getMovieProviders(movieId: Long): Result<List<Provider>> {
+        return online.getMovieProviders(movieId)
     }
 
 }

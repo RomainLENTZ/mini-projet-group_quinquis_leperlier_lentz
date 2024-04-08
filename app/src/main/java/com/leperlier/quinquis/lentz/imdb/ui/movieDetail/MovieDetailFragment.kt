@@ -7,12 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gmail.eamosse.imdb.databinding.FragmentMovieDetailBinding
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.MovieDesignType
+import com.leperlier.quinquis.lentz.imdb.data.Provider
 import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
 import com.leperlier.quinquis.lentz.imdb.ui.movieList.MovieListViewModel
+import com.leperlier.quinquis.lentz.imdb.ui.providers.ProvidersAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,18 +39,12 @@ class MovieDetailFragment : Fragment() {
         
         val movie: Movie? = arguments?.getParcelable("movie")
         movie?.let {
-            binding.apply {
-                if (it.backdrop_path != null) {
-                    loadImageWithGlide(basicUrl + it.backdrop_path)
-                }
-                movieTitle.text = it.title
-                movieOverview.text = it.overview
-                movieReleaseDate.text = it.release_date
-                movieVoteAverage.text = it.vote_average.toString() + " / 10"
-                buttonBack.setOnClickListener{
-                    requireActivity().supportFragmentManager.popBackStack()
-                }
-            }
+            setupMovieDetails(it)
+            movieDetailViewModel.getMovieProviders(it.id)
+        }
+
+        movieDetailViewModel.providers.observe(viewLifecycleOwner) { providers ->
+            setupProvidersRecyclerView(providers)
         }
 
         with(movieDetailViewModel) {
@@ -71,6 +68,37 @@ class MovieDetailFragment : Fragment() {
 
             error.observe(viewLifecycleOwner, Observer {
             })
+        }
+
+        movie?.id?.let { movieId ->
+            movieDetailViewModel.getMovieProviders(movieId)
+        }
+
+        movieDetailViewModel.providers.observe(viewLifecycleOwner, Observer { providers ->
+            // Mettre à jour l'UI ici avec les informations des providers
+            // Vous pouvez utiliser une RecyclerView ou ajouter dynamiquement des vues pour chaque provider
+        })
+    }
+
+    private fun setupProvidersRecyclerView(providers: List<Provider>) {
+        val providersAdapter = ProvidersAdapter(providers)
+        binding.streamingServicesRecyclerView.apply {
+            adapter = providersAdapter
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+    private fun setupMovieDetails(movie: Movie) {
+        binding.apply {
+            if (movie.backdrop_path != null) {
+                loadImageWithGlide(basicUrl + movie.backdrop_path)
+            }
+            movieTitle.text = movie.title
+            movieOverview.text = movie.overview
+            movieReleaseDate.text = movie.release_date
+            movieVoteAverage.text = movie.vote_average.toString() + " / 10"
+            buttonBack.setOnClickListener{
+                requireActivity().supportFragmentManager.popBackStack()
+            }
         }
     }
 

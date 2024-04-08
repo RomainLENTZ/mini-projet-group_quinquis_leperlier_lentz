@@ -1,8 +1,11 @@
 package com.leperlier.quinquis.lentz.imdb.datasources
 
+import CategoryResponse
 import MovieResponse
+import com.leperlier.quinquis.lentz.imdb.api.response.ProviderResponse
 import com.leperlier.quinquis.lentz.imdb.api.response.toToken
 import com.leperlier.quinquis.lentz.imdb.api.service.MovieService
+import com.leperlier.quinquis.lentz.imdb.data.Provider
 import com.leperlier.quinquis.lentz.imdb.data.Token
 import com.leperlier.quinquis.lentz.imdb.utils.Result
 import com.leperlier.quinquis.lentz.imdb.utils.safeCall // Assurez-vous que ceci est correctement importé.
@@ -127,6 +130,28 @@ internal class OnlineDataSource @Inject constructor(private val service: MovieSe
             }
         }
     }
+
+
+    suspend fun getMovieProviders(movieId: Long): Result<List<Provider>> = safeCall {
+        val response = service.getMovieProviders(movieId)
+        if (response.isSuccessful) {
+            val frProviders = response.body()?.results?.get("FR")?.flatrate?.map { providerDetails ->
+                Provider(
+                    id = providerDetails.id,
+                    name = providerDetails.name,
+                    logoPath = providerDetails.logoPath ?: ""
+                )
+            }
+            Result.Succes(frProviders ?: listOf())
+        } else {
+            Result.Error(
+                exception = Exception("Erreur lors de la récupération des fournisseurs"),
+                message = response.message(),
+                code = response.code()
+            )
+        }
+    }
+
 
 
 
