@@ -12,6 +12,7 @@ import com.gmail.eamosse.imdb.R
 import com.gmail.eamosse.imdb.databinding.FragmentHomeBinding
 import com.leperlier.quinquis.lentz.imdb.data.Category
 import com.leperlier.quinquis.lentz.imdb.ui.movieList.MovieListFragment
+import com.leperlier.quinquis.lentz.imdb.ui.serieList.SerieListFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,13 +31,19 @@ class HomeFragment : Fragment() {
 
         // Configuration initiale des RecyclerViews pour les catégories
         setupCategoryRecyclerView()
+        setupSerieCategoryRecyclerView()
 
         homeViewModel.token.observe(viewLifecycleOwner, Observer {
-            homeViewModel.getCategories()
+            homeViewModel.getMovieCategories()
+            homeViewModel.getSerieCategories()
         })
 
-        homeViewModel.categories.observe(viewLifecycleOwner, Observer { categories ->
+        homeViewModel.movieCategories.observe(viewLifecycleOwner, Observer { categories ->
             (binding.categoryList.adapter as MovieHorizontalAdapter).updateCategories(categories)
+        })
+
+        homeViewModel.serieCategories.observe(viewLifecycleOwner, Observer { categories ->
+            (binding.categorySerieList.adapter as SerieHorizontalAdapter).updateCategories(categories)
         })
 
         homeViewModel.error.observe(viewLifecycleOwner, Observer {
@@ -51,7 +58,27 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun loadMovieListFragment(category: Category) {
+    private fun setupSerieCategoryRecyclerView() {
+        binding.categorySerieList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.categorySerieList.adapter = SerieHorizontalAdapter(listOf()) { category ->
+            loadSerieListFragment(category)
+        }
+    }
+
+    private fun loadSerieListFragment(category: Category) {
+        val fragment = SerieListFragment().apply {
+            arguments = Bundle().apply {
+                putString("categoryName", category.name)
+                putInt("categoryId", category.id)
+            }
+        }
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun loadMovieListFragment(category: Category) {
         val fragment = MovieListFragment().apply {
             arguments = Bundle().apply {
                 putString("categoryName", category.name)

@@ -14,8 +14,11 @@ import com.gmail.eamosse.imdb.databinding.FragmentHomeBinding
 import com.gmail.eamosse.imdb.databinding.FragmentTrendingBinding
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.MovieDesignType
+import com.leperlier.quinquis.lentz.imdb.data.Serie
 import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
 import com.leperlier.quinquis.lentz.imdb.ui.movieDetail.MovieDetailFragment
+import com.leperlier.quinquis.lentz.imdb.ui.serieDetail.SerieDetailFragment
+import com.leperlier.quinquis.lentz.imdb.ui.serieList.SerieAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,10 +40,19 @@ class TrendingFragment : Fragment() {
         trendingViewModel.trendingDayMovies.observe(viewLifecycleOwner) { trendingDayMovies ->
             (binding.trendingDayMovieList.adapter as MovieAdapter).updateMovies(trendingDayMovies)
         }
-
         trendingViewModel.trendingWeekMovies.observe(viewLifecycleOwner) { trendingWeekMovies ->
             (binding.trendingWeekMovieList.adapter as MovieAdapter).updateMovies(trendingWeekMovies)
         }
+
+
+        trendingViewModel.trendingDaySeries.observe(viewLifecycleOwner) { trendingDaySeries ->
+            (binding.trendingDaySerieList.adapter as SerieAdapter).updateSeries(trendingDaySeries)
+        }
+        trendingViewModel.trendingWeekSeries.observe(viewLifecycleOwner) { trendingWeekSeries ->
+            (binding.trendingWeekSerieList.adapter as SerieAdapter).updateSeries(trendingWeekSeries)
+        }
+
+
     }
 
     private fun setupRecyclerViews() {
@@ -57,6 +69,20 @@ class TrendingFragment : Fragment() {
                 openMovieDetailFragment(movie)
             }, MovieDesignType.HORIZONTAL)
         }
+
+        binding.trendingDaySerieList.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = SerieAdapter(listOf(), { serie ->
+                openSerieDetailFragment(serie)
+            }, MovieDesignType.HORIZONTAL)
+        }
+
+        binding.trendingWeekSerieList.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = SerieAdapter(listOf(), { serie ->
+                openSerieDetailFragment(serie)
+            }, MovieDesignType.HORIZONTAL)
+        }
     }
 
     private fun openMovieDetailFragment(movie: Movie) {
@@ -67,6 +93,18 @@ class TrendingFragment : Fragment() {
         }
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.container, movieDetailFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun openSerieDetailFragment(serie: Serie) {
+        val serieDetailFragment = SerieDetailFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable("serie", serie)
+            }
+        }
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.container, serieDetailFragment)
             .addToBackStack(null)
             .commit()
     }

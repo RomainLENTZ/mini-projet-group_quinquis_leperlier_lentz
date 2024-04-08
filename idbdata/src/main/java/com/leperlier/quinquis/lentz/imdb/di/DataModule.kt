@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.gmail.eamosse.idbdata.BuildConfig
 import com.leperlier.quinquis.lentz.imdb.api.service.MovieService
+import com.leperlier.quinquis.lentz.imdb.api.service.SerieService
 import com.leperlier.quinquis.lentz.imdb.local.daos.TokenDao
 import com.leperlier.quinquis.lentz.imdb.local.databases.IdbDataBase
 import dagger.Module
@@ -71,6 +72,19 @@ object DataModule {
             .client(httpClient)
             .build()
             .create(MovieService::class.java)
+    }
+
+    @Provides
+    internal fun provideSerieService(
+        @Named("BASE_URL") baseUrl: String,
+        httpClient: OkHttpClient
+    ): SerieService {
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(baseUrl)
+            .client(httpClient)
+            .build()
+            .create(SerieService::class.java)
     }
 }
 

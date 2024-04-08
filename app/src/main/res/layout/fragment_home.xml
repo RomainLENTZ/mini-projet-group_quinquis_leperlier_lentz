@@ -85,6 +85,20 @@
         android:layout_marginTop="20dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/category_serie_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/category_serie_title"
+        app:layout_constraintVertical_bias="1.0"
+        tools:listitem="@layout/movie_horizontal_item" />
+
 
 
 
