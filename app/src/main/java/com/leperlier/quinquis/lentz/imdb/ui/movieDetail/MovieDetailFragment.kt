@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.gmail.eamosse.imdb.R
 import com.gmail.eamosse.imdb.databinding.FragmentMovieDetailBinding
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.MovieDesignType
@@ -44,7 +45,12 @@ class MovieDetailFragment : Fragment() {
         }
 
         movieDetailViewModel.providers.observe(viewLifecycleOwner) { providers ->
-            setupProvidersRecyclerView(providers)
+            if (providers.isEmpty()) {
+                displayNoProvidersMessage()
+            } else {
+                setupProvidersRecyclerView(providers)
+                binding.providersMessageTextview.visibility = View.GONE
+            }
         }
 
         with(movieDetailViewModel) {
@@ -81,6 +87,12 @@ class MovieDetailFragment : Fragment() {
             adapter = providersAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
+    }
+
+    private fun displayNoProvidersMessage() {
+        binding.providersMessageTextview.visibility = View.VISIBLE
+        binding.providersMessageTextview.text = getString(R.string.no_providers_message)
+        //binding.providersMessageTextview.visibility = View.GONE
     }
     private fun setupMovieDetails(movie: Movie) {
         binding.apply {
