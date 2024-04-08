@@ -73,11 +73,6 @@ class MovieDetailFragment : Fragment() {
         movie?.id?.let { movieId ->
             movieDetailViewModel.getMovieProviders(movieId)
         }
-
-        movieDetailViewModel.providers.observe(viewLifecycleOwner, Observer { providers ->
-            // Mettre à jour l'UI ici avec les informations des providers
-            // Vous pouvez utiliser une RecyclerView ou ajouter dynamiquement des vues pour chaque provider
-        })
     }
 
     private fun setupProvidersRecyclerView(providers: List<Provider>) {

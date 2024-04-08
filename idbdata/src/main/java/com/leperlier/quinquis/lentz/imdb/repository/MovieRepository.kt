@@ -1,5 +1,6 @@
 package com.leperlier.quinquis.lentz.imdb.repository
 
+import com.leperlier.quinquis.lentz.imdb.api.response.CountryProviders
 import com.leperlier.quinquis.lentz.imdb.data.Category
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.Provider
@@ -25,9 +26,7 @@ class MovieRepository @Inject internal constructor(
     suspend fun getToken(): Result<Token> {
         return when (val result = online.getToken()) {
             is Result.Succes -> {
-                //save the response in the local database
                 local.saveToken(result.data)
-                //return the response
                 Result.Succes(result.data)
             }
             is Result.Error -> result
@@ -37,8 +36,6 @@ class MovieRepository @Inject internal constructor(
     suspend fun getCategories(): Result<List<Category>> {
         return when(val result = online.getCategories()) {
             is Result.Succes -> {
-                // On utilise la fonction map pour convertir les catégories de la réponse serveur
-                // en liste de categories d'objets de l'application
                 val categories = result.data.map {
                     it.toCategory()
                 }

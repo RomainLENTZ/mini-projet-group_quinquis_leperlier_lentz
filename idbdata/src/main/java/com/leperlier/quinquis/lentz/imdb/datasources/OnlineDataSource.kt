@@ -2,6 +2,7 @@ package com.leperlier.quinquis.lentz.imdb.datasources
 
 import CategoryResponse
 import MovieResponse
+import com.leperlier.quinquis.lentz.imdb.api.response.CountryProviders
 import com.leperlier.quinquis.lentz.imdb.api.response.ProviderResponse
 import com.leperlier.quinquis.lentz.imdb.api.response.toToken
 import com.leperlier.quinquis.lentz.imdb.api.service.MovieService

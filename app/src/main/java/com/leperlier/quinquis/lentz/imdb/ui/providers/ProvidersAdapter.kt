@@ -19,7 +19,7 @@ class ProvidersAdapter(private val providers: List<Provider>) : RecyclerView.Ada
 
     override fun onBindViewHolder(holder: ProviderViewHolder, position: Int) {
         val provider = providers[position]
-        holder.binding.providerName.text = provider.name // Utilisez providerName au lieu de providerLogo
+        holder.binding.providerName.text = provider.name
     }
 
     override fun getItemCount(): Int = providers.size
