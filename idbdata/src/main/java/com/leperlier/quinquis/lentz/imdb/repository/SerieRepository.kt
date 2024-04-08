@@ -57,4 +57,13 @@ class SerieRepository @Inject internal constructor(
         }
     }
 
+    suspend fun getSimilarSeries(serieId: Int): Result<List<Serie>>{
+        return when(val result = online.getSimilarSeries(serieId)) {
+            is Result.Succes -> {
+                Result.Succes(result.data.results)
+            }
+            is Result.Error -> result
+        }
+    }
+
 }

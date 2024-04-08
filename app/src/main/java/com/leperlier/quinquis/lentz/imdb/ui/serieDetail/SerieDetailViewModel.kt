@@ -1,11 +1,9 @@
-package com.leperlier.quinquis.lentz.imdb.ui.serieList
+package com.leperlier.quinquis.lentz.imdb.ui.serieDetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.leperlier.quinquis.lentz.imdb.data.Category
-import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.Serie
 import com.leperlier.quinquis.lentz.imdb.data.Token
 import com.leperlier.quinquis.lentz.imdb.repository.SerieRepository
@@ -16,10 +14,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SerieListViewModel @Inject constructor(private val repository: SerieRepository) : ViewModel() {
+class SerieDetailViewModel @Inject constructor(private val repository: SerieRepository) : ViewModel() {
 
-    private val _series: MutableLiveData<List<Serie>> = MutableLiveData()
-    val series: LiveData<List<Serie>> get() = _series
+    private val _similarSeries: MutableLiveData<List<Serie>> = MutableLiveData()
+    val similarSeries: LiveData<List<Serie>> get() = _similarSeries
 
     private val _token: MutableLiveData<Token> = MutableLiveData()
     val token: LiveData<Token>
@@ -42,11 +40,11 @@ class SerieListViewModel @Inject constructor(private val repository: SerieReposi
         }
     }
 
-    fun getSeriesByCategory(categoryId: Int) {
+    fun getSimilarSeries(serieId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = repository.getSeriesByCategory(categoryId)) {
+            when (val result = repository.getSimilarSeries(serieId)) {
                 is Result.Succes -> {
-                    _series.postValue(result.data)
+                    _similarSeries.postValue(result.data)
                 }
                 is Result.Error -> {
                     _error.postValue(result.message)
@@ -54,5 +52,4 @@ class SerieListViewModel @Inject constructor(private val repository: SerieReposi
             }
         }
     }
-
 }

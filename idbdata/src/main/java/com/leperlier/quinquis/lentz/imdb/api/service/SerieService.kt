@@ -24,4 +24,7 @@ internal interface SerieService {
 
     @GET("trending/tv/week")
     suspend fun getWeekTrendingSeries(): Response<SeriesResponse>
+
+    @GET("tv/{tv_id}/similar")
+    suspend fun getSimilarSeries(@Path("tv_id") serieId: Int): Response<SeriesResponse>
 }

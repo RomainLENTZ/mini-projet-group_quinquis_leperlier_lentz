@@ -16,6 +16,7 @@ import com.leperlier.quinquis.lentz.imdb.data.MovieDesignType
 import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
 import com.leperlier.quinquis.lentz.imdb.ui.home.HomeFragment
 import com.leperlier.quinquis.lentz.imdb.ui.movieDetail.MovieDetailFragment
+import com.leperlier.quinquis.lentz.imdb.ui.serieDetail.SerieDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -54,19 +55,19 @@ class SerieListFragment : Fragment() {
 
         with(serieListViewModel) {
             token.observe(viewLifecycleOwner, Observer {
-                getMoviesByCategory(categoryId ?: 0)
+                getSeriesByCategory(categoryId ?: 0)
             })
 
             series.observe(viewLifecycleOwner, Observer { serieList ->
                 binding.seriesRecyclerView.adapter = SerieAdapter(serieList, { serie ->
-                    val movieDetailFragment = MovieDetailFragment().apply {
+                    val serieDetailFragment = SerieDetailFragment().apply {
                         arguments = Bundle().apply {
-                            putParcelable("movie", serie)
+                            putParcelable("serie", serie)
                         }
                     }
                     requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, movieDetailFragment)
-                        .addToBackStack("goToMovieDetails")
+                        .replace(R.id.container, serieDetailFragment)
+                        .addToBackStack("goToSerieDetails")
                         .commit()
                 }, MovieDesignType.VERTICAL)
             })
