@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.leperlier.quinquis.lentz.imdb.data.Movie
+import com.leperlier.quinquis.lentz.imdb.data.Provider
 import com.leperlier.quinquis.lentz.imdb.data.Token
 import com.leperlier.quinquis.lentz.imdb.repository.MovieRepository
 import com.leperlier.quinquis.lentz.imdb.utils.Result
@@ -18,6 +19,9 @@ class MovieDetailViewModel @Inject constructor(private val repository: MovieRepo
 
     private val _similarMovies: MutableLiveData<List<Movie>> = MutableLiveData()
     val similarMovies: LiveData<List<Movie>> get() = _similarMovies
+
+    private val _providers = MutableLiveData<List<Provider>>()
+    val providers: LiveData<List<Provider>> = _providers
 
     private val _token: MutableLiveData<Token> = MutableLiveData()
     val token: LiveData<Token>
@@ -52,4 +56,18 @@ class MovieDetailViewModel @Inject constructor(private val repository: MovieRepo
             }
         }
     }
+
+    fun getMovieProviders(movieId: Long) {
+        viewModelScope.launch {
+            when (val result = repository.getMovieProviders(movieId)) {
+                is Result.Succes -> {
+                    _providers.value = result.data
+                }
+                is Result.Error -> {
+                    _error.postValue(result.message)
+                }
+            }
+        }
+    }
+
 }
