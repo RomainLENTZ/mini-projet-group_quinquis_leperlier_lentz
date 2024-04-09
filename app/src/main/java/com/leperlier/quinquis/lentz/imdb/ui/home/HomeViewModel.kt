@@ -76,4 +76,5 @@ class HomeViewModel @Inject constructor(private val movieRepository: MovieReposi
             }
         }
     }
+
 }

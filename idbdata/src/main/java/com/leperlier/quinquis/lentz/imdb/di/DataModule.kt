@@ -5,7 +5,9 @@ import androidx.room.Room
 import com.gmail.eamosse.idbdata.BuildConfig
 import com.leperlier.quinquis.lentz.imdb.api.service.MovieService
 import com.leperlier.quinquis.lentz.imdb.api.service.SerieService
+import com.leperlier.quinquis.lentz.imdb.local.daos.FavoritesDao
 import com.leperlier.quinquis.lentz.imdb.local.daos.TokenDao
+import com.leperlier.quinquis.lentz.imdb.local.databases.AppDatabase
 import com.leperlier.quinquis.lentz.imdb.local.databases.IdbDataBase
 import dagger.Module
 import dagger.Provides
@@ -38,6 +40,20 @@ object DataModule {
     @Provides
     internal fun providetokenDao(database: IdbDataBase): TokenDao {
         return database.tokenDao()
+    }
+
+    @Provides
+    @Singleton
+    internal fun provideFavoritesDatabase(@ApplicationContext appContext: Context): AppDatabase {
+        return Room.databaseBuilder(
+            appContext,
+            AppDatabase::class.java, "favorites_database.db"
+        ).build()
+    }
+
+    @Provides
+    internal fun provideFavoritesDao(database: AppDatabase): FavoritesDao {
+        return database.favoritesDao()
     }
 
     @Provides

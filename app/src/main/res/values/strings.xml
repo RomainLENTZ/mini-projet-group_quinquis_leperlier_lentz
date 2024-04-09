@@ -19,4 +19,5 @@
     <string name="series">Series</string>
     <string name="no_providers_message">Aucune plateforme de streaming n\'est disponible en france pour ce film</string>
     <string name="disponible">Disponible sur</string>
+    <string name="favorites">Favorites</string>
 </resources>

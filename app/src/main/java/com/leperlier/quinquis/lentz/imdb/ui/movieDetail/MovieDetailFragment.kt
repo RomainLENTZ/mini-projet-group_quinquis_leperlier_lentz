@@ -14,8 +14,8 @@ import com.gmail.eamosse.imdb.databinding.FragmentMovieDetailBinding
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.MovieDesignType
 import com.leperlier.quinquis.lentz.imdb.data.Provider
+import com.leperlier.quinquis.lentz.imdb.local.entities.FavoriteEntity
 import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
-import com.leperlier.quinquis.lentz.imdb.ui.movieList.MovieListViewModel
 import com.leperlier.quinquis.lentz.imdb.ui.providers.ProvidersAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +25,7 @@ class MovieDetailFragment : Fragment() {
     private var _binding: FragmentMovieDetailBinding? = null
 
     private val movieDetailViewModel: MovieDetailViewModel by viewModels()
-
+    private var isCurrentFavorite: Boolean = false
     private val binding get() = _binding!!
 
     private val basicUrl = "https://image.tmdb.org/t/p/original"
@@ -42,6 +42,15 @@ class MovieDetailFragment : Fragment() {
         movie?.let {
             setupMovieDetails(it)
             movieDetailViewModel.getMovieProviders(it.id)
+
+            movieDetailViewModel.isFavorite(it.id).observe(viewLifecycleOwner) { isFavorite ->
+                isCurrentFavorite = isFavorite
+                if (isFavorite) {
+                    binding.favoriteButton.setImageResource(R.drawable.baseline_favorite_24)
+                } else {
+                    binding.favoriteButton.setImageResource(R.drawable.baseline_favorite_border_24)
+                }
+            }
         }
 
         movieDetailViewModel.providers.observe(viewLifecycleOwner) { providers ->
@@ -78,6 +87,17 @@ class MovieDetailFragment : Fragment() {
 
         movie?.id?.let { movieId ->
             movieDetailViewModel.getMovieProviders(movieId)
+        }
+
+        binding.favoriteButton.setOnClickListener {
+            movie?.let { movie ->
+                val favorite = FavoriteEntity(movie.id, movie.title, true) // Adapt this to your Favorite entity
+                if (isCurrentFavorite) {
+                    movieDetailViewModel.removeFavorite(favorite)
+                } else {
+                    movieDetailViewModel.addFavorite(favorite)
+                }
+            }
         }
     }
 
@@ -118,6 +138,10 @@ class MovieDetailFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun handleFavorite(){
+
     }
 
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.Provider
 import com.leperlier.quinquis.lentz.imdb.data.Token
+import com.leperlier.quinquis.lentz.imdb.local.entities.FavoriteEntity
 import com.leperlier.quinquis.lentz.imdb.repository.MovieRepository
 import com.leperlier.quinquis.lentz.imdb.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -69,5 +70,22 @@ class MovieDetailViewModel @Inject constructor(private val repository: MovieRepo
             }
         }
     }
+
+    fun addFavorite(favorite: FavoriteEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addFavorite(favorite)
+        }
+    }
+
+    fun removeFavorite(favorite: FavoriteEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.removeFavorite(favorite)
+        }
+    }
+
+    fun isFavorite(movieId: Long): LiveData<Boolean> {
+        return repository.isFavorite(movieId)
+    }
+
 
 }
