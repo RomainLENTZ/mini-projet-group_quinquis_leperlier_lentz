@@ -13,6 +13,7 @@ import com.gmail.eamosse.imdb.R
 import com.gmail.eamosse.imdb.databinding.FragmentSerieDetailBinding
 import com.leperlier.quinquis.lentz.imdb.data.MovieDesignType
 import com.leperlier.quinquis.lentz.imdb.data.Serie
+import com.leperlier.quinquis.lentz.imdb.local.entities.FavoriteEntity
 import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
 import com.leperlier.quinquis.lentz.imdb.ui.movieDetail.MovieDetailFragment
 import com.leperlier.quinquis.lentz.imdb.ui.serieList.SerieAdapter
@@ -24,6 +25,7 @@ class SerieDetailFragment : Fragment() {
     private var _binding: FragmentSerieDetailBinding? = null
 
     private val serieDetailViewModel: SerieDetailViewModel by viewModels()
+    private var isCurrentFavorite: Boolean = false
 
     private val binding get() = _binding!!
 
@@ -51,6 +53,15 @@ class SerieDetailFragment : Fragment() {
                     requireActivity().supportFragmentManager.popBackStack()
                 }
             }
+
+            serieDetailViewModel.isFavorite(it.id).observe(viewLifecycleOwner) { isFavorite ->
+                isCurrentFavorite = isFavorite
+                if (isFavorite) {
+                    binding.favoriteButton.setImageResource(R.drawable.baseline_favorite_24)
+                } else {
+                    binding.favoriteButton.setImageResource(R.drawable.baseline_favorite_border_24)
+                }
+            }
         }
 
         with(serieDetailViewModel) {
@@ -74,6 +85,17 @@ class SerieDetailFragment : Fragment() {
 
             error.observe(viewLifecycleOwner, Observer {
             })
+        }
+
+        binding.favoriteButton.setOnClickListener {
+            serie?.let { serie ->
+                val favorite = FavoriteEntity(serie.id.toLong(), serie.name, true)
+                if (isCurrentFavorite) {
+                    serieDetailViewModel.removeFavorite(favorite)
+                } else {
+                    serieDetailViewModel.addFavorite(favorite)
+                }
+            }
         }
     }
 

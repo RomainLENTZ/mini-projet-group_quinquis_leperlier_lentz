@@ -88,15 +88,4 @@ class MovieRepository @Inject internal constructor(
         return online.getMovieProviders(movieId)
     }
 
-    suspend fun addFavorite(favorite: FavoriteEntity) {
-        local.addFavorite(favorite)
-    }
-
-    suspend fun removeFavorite(favorite: FavoriteEntity) {
-        local.removeFavorite(favorite)
-    }
-
-    fun isFavorite(movieId: Long): LiveData<Boolean> {
-        return local.isFavorite(movieId)
-    }
 }

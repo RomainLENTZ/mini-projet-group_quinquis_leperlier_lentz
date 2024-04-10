@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.leperlier.quinquis.lentz.imdb.data.Serie
 import com.leperlier.quinquis.lentz.imdb.data.Token
+import com.leperlier.quinquis.lentz.imdb.local.entities.FavoriteEntity
+import com.leperlier.quinquis.lentz.imdb.repository.FavoriteRepository
 import com.leperlier.quinquis.lentz.imdb.repository.SerieRepository
 import com.leperlier.quinquis.lentz.imdb.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SerieDetailViewModel @Inject constructor(private val repository: SerieRepository) : ViewModel() {
+class SerieDetailViewModel @Inject constructor(private val repository: SerieRepository, private val favoriteRepository : FavoriteRepository) : ViewModel() {
 
     private val _similarSeries: MutableLiveData<List<Serie>> = MutableLiveData()
     val similarSeries: LiveData<List<Serie>> get() = _similarSeries
@@ -51,5 +53,21 @@ class SerieDetailViewModel @Inject constructor(private val repository: SerieRepo
                 }
             }
         }
+    }
+
+    fun addFavorite(favorite: FavoriteEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoriteRepository.addFavorite(favorite)
+        }
+    }
+
+    fun removeFavorite(favorite: FavoriteEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoriteRepository.removeFavorite(favorite)
+        }
+    }
+
+    fun isFavorite(serieId: Int): LiveData<Boolean> {
+        return favoriteRepository.isFavorite(serieId.toLong())
     }
 }
