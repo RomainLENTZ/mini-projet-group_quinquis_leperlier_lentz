@@ -4,6 +4,7 @@ import CategoryResponse
 import MovieResponse
 import SeriesResponse
 import com.leperlier.quinquis.lentz.imdb.api.response.TokenResponse
+import com.leperlier.quinquis.lentz.imdb.data.Serie
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -30,4 +31,8 @@ internal interface SerieService {
 
     @GET("tv/{tv_id}/similar")
     suspend fun getSimilarSeries(@Path("tv_id") serieId: Int): Response<SeriesResponse>
+
+    @GET("tv/{tv_id}")
+    suspend fun getSerieById(@Path("tv_id") serieId: Long): Response<Serie>
+
 }

@@ -9,7 +9,7 @@ interface FavoritesDao {
     @Query("SELECT * FROM favorites WHERE id = :movieId LIMIT 1")
     fun getFavoriteById(movieId: Long): LiveData<FavoriteEntity?>
     @Query("SELECT * FROM favorites")
-    fun getAllFavorites(): List<FavoriteEntity>
+    fun getAllFavorites(): LiveData<List<FavoriteEntity>>
 
     @Insert
     fun insertFavorite(favorite: FavoriteEntity)

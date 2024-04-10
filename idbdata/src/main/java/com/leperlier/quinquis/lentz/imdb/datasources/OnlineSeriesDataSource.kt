@@ -5,6 +5,8 @@ import SeriesResponse
 import com.leperlier.quinquis.lentz.imdb.api.response.toToken
 import com.leperlier.quinquis.lentz.imdb.api.service.MovieService
 import com.leperlier.quinquis.lentz.imdb.api.service.SerieService
+import com.leperlier.quinquis.lentz.imdb.data.Movie
+import com.leperlier.quinquis.lentz.imdb.data.Serie
 import com.leperlier.quinquis.lentz.imdb.data.Token
 import com.leperlier.quinquis.lentz.imdb.utils.Result
 import com.leperlier.quinquis.lentz.imdb.utils.safeCall // Assurez-vous que ceci est correctement importé.
@@ -129,5 +131,20 @@ internal class OnlineSeriesDataSource @Inject constructor(private val service: S
             }
         }
     }
+
+    suspend fun getSerieById(serieId: Long): Result<Serie> = safeCall {
+        service.getSerieById(serieId).let { response ->
+            if (response.isSuccessful) {
+                Result.Succes(response.body()!!)
+            } else {
+                Result.Error(
+                    exception = Exception("Erreur lors de la récupération de la série favorite"),
+                    message = response.message(),
+                    code = response.code()
+                )
+            }
+        }
+    }
+
 
 }

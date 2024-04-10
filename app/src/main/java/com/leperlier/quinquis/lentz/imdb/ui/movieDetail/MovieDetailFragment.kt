@@ -16,6 +16,7 @@ import com.leperlier.quinquis.lentz.imdb.data.MovieDesignType
 import com.leperlier.quinquis.lentz.imdb.data.Provider
 import com.leperlier.quinquis.lentz.imdb.local.entities.FavoriteEntity
 import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
+import com.leperlier.quinquis.lentz.imdb.ui.home.HomeFragment
 import com.leperlier.quinquis.lentz.imdb.ui.providers.ProvidersAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,8 +40,9 @@ class MovieDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         val movie: Movie? = arguments?.getParcelable("movie")
+        val fromHome: Boolean? = arguments?.getBoolean("fromHome", false)
         movie?.let {
-            setupMovieDetails(it)
+            setupMovieDetails(it, fromHome)
             movieDetailViewModel.getMovieProviders(it.id)
 
             movieDetailViewModel.isFavorite(it.id).observe(viewLifecycleOwner) { isFavorite ->
@@ -114,7 +116,7 @@ class MovieDetailFragment : Fragment() {
         binding.providersMessageTextview.text = getString(R.string.no_providers_message)
         //binding.providersMessageTextview.visibility = View.GONE
     }
-    private fun setupMovieDetails(movie: Movie) {
+    private fun setupMovieDetails(movie: Movie, fromHome: Boolean?) {
         binding.apply {
             if (movie.backdrop_path != null) {
                 loadImageWithGlide(basicUrl + movie.backdrop_path)
@@ -124,7 +126,14 @@ class MovieDetailFragment : Fragment() {
             movieReleaseDate.text = movie.release_date
             movieVoteAverage.text = movie.vote_average.toString() + " / 10"
             buttonBack.setOnClickListener{
-                requireActivity().supportFragmentManager.popBackStack()
+                if(fromHome == true){
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.container, HomeFragment())
+                        .addToBackStack("backToHome")
+                        .commit()
+                }else{
+                    requireActivity().supportFragmentManager.popBackStack()
+                }
             }
         }
     }

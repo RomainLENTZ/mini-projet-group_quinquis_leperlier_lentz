@@ -32,4 +32,8 @@ class FavoriteRepository @Inject internal constructor(
     fun isFavorite(movieId: Long): LiveData<Boolean> {
         return local.isFavorite(movieId)
     }
+
+    fun getAllFavorite(): LiveData<List<FavoriteEntity>>{
+        return local.getFavorites()
+    }
 }

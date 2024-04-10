@@ -9,7 +9,7 @@ data class Serie(
     val id: Int,
     val name: String,
     val overview: String,
-    val seasons: Int,
+    // val seasons: Int,
     val episodes: Int,
     val poster_path: String,
     val backdrop_path: String,

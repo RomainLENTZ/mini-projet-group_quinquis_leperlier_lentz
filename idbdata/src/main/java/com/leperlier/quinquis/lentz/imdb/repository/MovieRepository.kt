@@ -88,4 +88,8 @@ class MovieRepository @Inject internal constructor(
         return online.getMovieProviders(movieId)
     }
 
+    suspend fun getMovieById(movieId: Long): Result<Movie>{
+        return online.getMovieById(movieId)
+    }
+
 }

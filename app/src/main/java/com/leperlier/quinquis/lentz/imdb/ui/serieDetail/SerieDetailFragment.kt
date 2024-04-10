@@ -15,6 +15,7 @@ import com.leperlier.quinquis.lentz.imdb.data.MovieDesignType
 import com.leperlier.quinquis.lentz.imdb.data.Serie
 import com.leperlier.quinquis.lentz.imdb.local.entities.FavoriteEntity
 import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
+import com.leperlier.quinquis.lentz.imdb.ui.home.HomeFragment
 import com.leperlier.quinquis.lentz.imdb.ui.movieDetail.MovieDetailFragment
 import com.leperlier.quinquis.lentz.imdb.ui.serieList.SerieAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,6 +42,8 @@ class SerieDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val serie: Serie? = arguments?.getParcelable("serie")
+        val fromHome: Boolean? = arguments?.getBoolean("fromHome", false)
+
         serie?.let {
             binding.apply {
                 if (it.backdrop_path != null) {
@@ -50,7 +53,14 @@ class SerieDetailFragment : Fragment() {
                 serieOverview.text = it.overview
                 serieVoteAverage.text = it.vote_average.toString() + " / 10"
                 buttonBack.setOnClickListener{
-                    requireActivity().supportFragmentManager.popBackStack()
+                    if(fromHome == true){
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.container, HomeFragment())
+                            .addToBackStack("backToHome")
+                            .commit()
+                    }else{
+                        requireActivity().supportFragmentManager.popBackStack()
+                    }
                 }
             }
 
@@ -89,7 +99,7 @@ class SerieDetailFragment : Fragment() {
 
         binding.favoriteButton.setOnClickListener {
             serie?.let { serie ->
-                val favorite = FavoriteEntity(serie.id.toLong(), serie.name, true)
+                val favorite = FavoriteEntity(serie.id.toLong(), serie.name, false)
                 if (isCurrentFavorite) {
                     serieDetailViewModel.removeFavorite(favorite)
                 } else {

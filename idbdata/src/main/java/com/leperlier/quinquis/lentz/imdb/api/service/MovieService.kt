@@ -4,6 +4,7 @@ import CategoryResponse
 import MovieResponse
 import com.leperlier.quinquis.lentz.imdb.api.response.ProviderResponse
 import com.leperlier.quinquis.lentz.imdb.api.response.TokenResponse
+import com.leperlier.quinquis.lentz.imdb.data.Movie
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -33,4 +34,8 @@ internal interface MovieService {
 
     @GET("movie/{movie_id}/watch/providers")
     suspend fun getMovieProviders(@Path("movie_id") movieId: Long): Response<ProviderResponse>
+
+    @GET("movie/{movie_id}")
+    suspend fun getMovieById(@Path("movie_id") movieId: Long): Response<Movie>
+
 }

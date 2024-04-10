@@ -51,8 +51,8 @@ internal class LocalDataSource @Inject constructor(private val tokenDao: TokenDa
         }
     }
 
-    suspend fun getFavorites(): List<FavoriteEntity> = withContext(Dispatchers.IO) {
-        favoritesDao.getAllFavorites()
+    fun getFavorites(): LiveData<List<FavoriteEntity>> {
+        return favoritesDao.getAllFavorites()
     }
 
 }

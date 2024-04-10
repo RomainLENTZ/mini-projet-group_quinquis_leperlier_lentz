@@ -6,6 +6,7 @@ import com.leperlier.quinquis.lentz.imdb.api.response.CountryProviders
 import com.leperlier.quinquis.lentz.imdb.api.response.ProviderResponse
 import com.leperlier.quinquis.lentz.imdb.api.response.toToken
 import com.leperlier.quinquis.lentz.imdb.api.service.MovieService
+import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.Provider
 import com.leperlier.quinquis.lentz.imdb.data.Token
 import com.leperlier.quinquis.lentz.imdb.utils.Result
@@ -150,6 +151,20 @@ internal class OnlineDataSource @Inject constructor(private val service: MovieSe
                 message = response.message(),
                 code = response.code()
             )
+        }
+    }
+
+    suspend fun getMovieById(movieId: Long): Result<Movie> = safeCall {
+        service.getMovieById(movieId).let { response ->
+            if (response.isSuccessful) {
+                Result.Succes(response.body()!!)
+            } else {
+                Result.Error(
+                    exception = Exception("Erreur lors de la récupération du film favori"),
+                    message = response.message(),
+                    code = response.code()
+                )
+            }
         }
     }
 
