@@ -84,4 +84,9 @@ class SerieRepository @Inject internal constructor(
         }
     }
 
+    suspend fun getSerieById(serieId: Long): Result<Serie>{
+        return online.getSerieById(serieId)
+    }
+
+
 }

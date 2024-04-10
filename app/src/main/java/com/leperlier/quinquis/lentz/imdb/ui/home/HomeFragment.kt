@@ -11,7 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gmail.eamosse.imdb.R
 import com.gmail.eamosse.imdb.databinding.FragmentHomeBinding
 import com.leperlier.quinquis.lentz.imdb.data.Category
+import com.leperlier.quinquis.lentz.imdb.local.entities.FavoriteEntity
+import com.leperlier.quinquis.lentz.imdb.ui.movieDetail.MovieDetailFragment
 import com.leperlier.quinquis.lentz.imdb.ui.movieList.MovieListFragment
+import com.leperlier.quinquis.lentz.imdb.ui.serieDetail.SerieDetailFragment
 import com.leperlier.quinquis.lentz.imdb.ui.serieList.SerieListFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,18 +35,22 @@ class HomeFragment : Fragment() {
         // Configuration initiale des RecyclerViews pour les catégories
         setupCategoryRecyclerView()
         setupSerieCategoryRecyclerView()
+        setupFavoriteRecyclerView()
 
         homeViewModel.token.observe(viewLifecycleOwner, Observer {
             homeViewModel.getMovieCategories()
             homeViewModel.getSerieCategories()
+            homeViewModel.getFavoriteFilmAndSeries().observe(viewLifecycleOwner){ favs ->
+                (binding.favoriteMovieAndSeriesList.adapter as FavoriteHorizontalAdapter).updateFavorites(favs ?: emptyList())
+            }
         })
 
         homeViewModel.movieCategories.observe(viewLifecycleOwner, Observer { categories ->
             (binding.categoryList.adapter as MovieHorizontalAdapter).updateCategories(categories)
         })
 
-        homeViewModel.serieCategories.observe(viewLifecycleOwner, Observer { categories ->
-            (binding.categorySerieList.adapter as SerieHorizontalAdapter).updateCategories(categories)
+        homeViewModel.serieCategories.observe(viewLifecycleOwner, Observer { series ->
+            (binding.categorySerieList.adapter as SerieHorizontalAdapter).updateCategories(series)
         })
 
         homeViewModel.error.observe(viewLifecycleOwner, Observer {
@@ -62,6 +69,13 @@ class HomeFragment : Fragment() {
         binding.categorySerieList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.categorySerieList.adapter = SerieHorizontalAdapter(listOf()) { category ->
             loadSerieListFragment(category)
+        }
+    }
+
+    private fun setupFavoriteRecyclerView() {
+        binding.favoriteMovieAndSeriesList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.favoriteMovieAndSeriesList.adapter = FavoriteHorizontalAdapter(listOf()) { fav ->
+            loadFavoriteFragment(fav)
         }
     }
 
@@ -89,5 +103,35 @@ class HomeFragment : Fragment() {
             .replace(R.id.container, fragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    private fun loadFavoriteFragment(fav: FavoriteEntity){
+        if(fav.isMovie){
+            homeViewModel.getMovieFromFavoriteId(fav.id).observe(viewLifecycleOwner, Observer { movie ->
+                val movieDetailFragment = MovieDetailFragment().apply {
+                    arguments = Bundle().apply {
+                        putParcelable("movie", movie)
+                        putBoolean("fromHome", true)
+                    }
+                }
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, movieDetailFragment)
+                    .addToBackStack(null)
+                    .commit()
+            })
+        }else{
+            homeViewModel.getSerieFromFavoriteId(fav.id).observe(viewLifecycleOwner, Observer { serie ->
+                val serieDetailFragment = SerieDetailFragment().apply {
+                    arguments = Bundle().apply {
+                        putParcelable("serie", serie)
+                    }
+                }
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, serieDetailFragment)
+                    .addToBackStack("goToSerieDetails")
+                    .commit()
+            })
+        }
+
     }
 }

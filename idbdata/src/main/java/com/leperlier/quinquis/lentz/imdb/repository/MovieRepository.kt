@@ -1,5 +1,6 @@
 package com.leperlier.quinquis.lentz.imdb.repository
 
+import androidx.lifecycle.LiveData
 import com.leperlier.quinquis.lentz.imdb.api.response.CountryProviders
 import com.leperlier.quinquis.lentz.imdb.data.Category
 import com.leperlier.quinquis.lentz.imdb.data.Movie
@@ -7,7 +8,9 @@ import com.leperlier.quinquis.lentz.imdb.data.Provider
 import com.leperlier.quinquis.lentz.imdb.data.Token
 import com.leperlier.quinquis.lentz.imdb.datasources.LocalDataSource
 import com.leperlier.quinquis.lentz.imdb.datasources.OnlineDataSource
+import com.leperlier.quinquis.lentz.imdb.local.entities.FavoriteEntity
 import com.leperlier.quinquis.lentz.imdb.utils.Result
+import dagger.hilt.android.lifecycle.HiltViewModel
 import toCategory
 import javax.inject.Inject
 
@@ -83,6 +86,10 @@ class MovieRepository @Inject internal constructor(
 
     suspend fun getMovieProviders(movieId: Long): Result<List<Provider>> {
         return online.getMovieProviders(movieId)
+    }
+
+    suspend fun getMovieById(movieId: Long): Result<Movie>{
+        return online.getMovieById(movieId)
     }
 
 }

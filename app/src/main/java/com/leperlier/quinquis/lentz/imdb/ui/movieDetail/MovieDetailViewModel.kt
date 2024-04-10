@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.Provider
 import com.leperlier.quinquis.lentz.imdb.data.Token
+import com.leperlier.quinquis.lentz.imdb.local.entities.FavoriteEntity
+import com.leperlier.quinquis.lentz.imdb.repository.FavoriteRepository
 import com.leperlier.quinquis.lentz.imdb.repository.MovieRepository
 import com.leperlier.quinquis.lentz.imdb.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieDetailViewModel @Inject constructor(private val repository: MovieRepository) : ViewModel() {
+class MovieDetailViewModel @Inject constructor(private val repository: MovieRepository, private val favoriteRepository : FavoriteRepository) : ViewModel() {
 
     private val _similarMovies: MutableLiveData<List<Movie>> = MutableLiveData()
     val similarMovies: LiveData<List<Movie>> get() = _similarMovies
@@ -69,5 +71,22 @@ class MovieDetailViewModel @Inject constructor(private val repository: MovieRepo
             }
         }
     }
+
+    fun addFavorite(favorite: FavoriteEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoriteRepository.addFavorite(favorite)
+        }
+    }
+
+    fun removeFavorite(favorite: FavoriteEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoriteRepository.removeFavorite(favorite)
+        }
+    }
+
+    fun isFavorite(movieId: Long): LiveData<Boolean> {
+        return favoriteRepository.isFavorite(movieId)
+    }
+
 
 }

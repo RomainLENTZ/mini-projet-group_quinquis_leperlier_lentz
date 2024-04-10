@@ -14,8 +14,9 @@ import com.gmail.eamosse.imdb.databinding.FragmentMovieDetailBinding
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.MovieDesignType
 import com.leperlier.quinquis.lentz.imdb.data.Provider
+import com.leperlier.quinquis.lentz.imdb.local.entities.FavoriteEntity
 import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
-import com.leperlier.quinquis.lentz.imdb.ui.movieList.MovieListViewModel
+import com.leperlier.quinquis.lentz.imdb.ui.home.HomeFragment
 import com.leperlier.quinquis.lentz.imdb.ui.providers.ProvidersAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +26,7 @@ class MovieDetailFragment : Fragment() {
     private var _binding: FragmentMovieDetailBinding? = null
 
     private val movieDetailViewModel: MovieDetailViewModel by viewModels()
-
+    private var isCurrentFavorite: Boolean = false
     private val binding get() = _binding!!
 
     private val basicUrl = "https://image.tmdb.org/t/p/original"
@@ -39,9 +40,19 @@ class MovieDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         val movie: Movie? = arguments?.getParcelable("movie")
+        val fromHome: Boolean? = arguments?.getBoolean("fromHome", false)
         movie?.let {
-            setupMovieDetails(it)
+            setupMovieDetails(it, fromHome)
             movieDetailViewModel.getMovieProviders(it.id)
+
+            movieDetailViewModel.isFavorite(it.id).observe(viewLifecycleOwner) { isFavorite ->
+                isCurrentFavorite = isFavorite
+                if (isFavorite) {
+                    binding.favoriteButton.setImageResource(R.drawable.baseline_favorite_24)
+                } else {
+                    binding.favoriteButton.setImageResource(R.drawable.baseline_favorite_border_24)
+                }
+            }
         }
 
         movieDetailViewModel.providers.observe(viewLifecycleOwner) { providers ->
@@ -79,6 +90,17 @@ class MovieDetailFragment : Fragment() {
         movie?.id?.let { movieId ->
             movieDetailViewModel.getMovieProviders(movieId)
         }
+
+        binding.favoriteButton.setOnClickListener {
+            movie?.let { movie ->
+                val favorite = FavoriteEntity(movie.id, movie.title, true) // Adapt this to your Favorite entity
+                if (isCurrentFavorite) {
+                    movieDetailViewModel.removeFavorite(favorite)
+                } else {
+                    movieDetailViewModel.addFavorite(favorite)
+                }
+            }
+        }
     }
 
     private fun setupProvidersRecyclerView(providers: List<Provider>) {
@@ -94,7 +116,7 @@ class MovieDetailFragment : Fragment() {
         binding.providersMessageTextview.text = getString(R.string.no_providers_message)
         //binding.providersMessageTextview.visibility = View.GONE
     }
-    private fun setupMovieDetails(movie: Movie) {
+    private fun setupMovieDetails(movie: Movie, fromHome: Boolean?) {
         binding.apply {
             if (movie.backdrop_path != null) {
                 loadImageWithGlide(basicUrl + movie.backdrop_path)
@@ -104,7 +126,14 @@ class MovieDetailFragment : Fragment() {
             movieReleaseDate.text = movie.release_date
             movieVoteAverage.text = movie.vote_average.toString() + " / 10"
             buttonBack.setOnClickListener{
-                requireActivity().supportFragmentManager.popBackStack()
+                if(fromHome == true){
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.container, HomeFragment())
+                        .addToBackStack("backToHome")
+                        .commit()
+                }else{
+                    requireActivity().supportFragmentManager.popBackStack()
+                }
             }
         }
     }
@@ -118,6 +147,10 @@ class MovieDetailFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun handleFavorite(){
+
     }
 
 }

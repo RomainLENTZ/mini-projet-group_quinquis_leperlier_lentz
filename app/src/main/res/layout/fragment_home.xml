@@ -99,7 +99,32 @@
         app:layout_constraintVertical_bias="1.0"
         tools:listitem="@layout/movie_horizontal_item" />
 
+    <TextView
+        android:id="@+id/favorite_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/favorites"
+        android:textStyle="bold"
+        android:textSize="40sp"
+        android:textColor="#303030"
+        app:layout_constraintTop_toBottomOf="@id/category_serie_list"
+        android:layout_marginTop="20dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favorite_movie_and_series_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/favorite_title"
+        app:layout_constraintVertical_bias="1.0"
+        tools:listitem="@layout/movie_horizontal_item" />
 
 
 

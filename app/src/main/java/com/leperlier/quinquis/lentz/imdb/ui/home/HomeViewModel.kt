@@ -6,7 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.leperlier.quinquis.lentz.imdb.data.Category
 import com.leperlier.quinquis.lentz.imdb.data.Movie
+import com.leperlier.quinquis.lentz.imdb.data.Serie
 import com.leperlier.quinquis.lentz.imdb.data.Token
+import com.leperlier.quinquis.lentz.imdb.local.entities.FavoriteEntity
+import com.leperlier.quinquis.lentz.imdb.repository.FavoriteRepository
 import com.leperlier.quinquis.lentz.imdb.repository.MovieRepository
 import com.leperlier.quinquis.lentz.imdb.repository.SerieRepository
 import com.leperlier.quinquis.lentz.imdb.utils.Result
@@ -16,13 +19,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val movieRepository: MovieRepository, private val serieRepository: SerieRepository) : ViewModel() {
+class HomeViewModel @Inject constructor(private val movieRepository: MovieRepository, private val serieRepository: SerieRepository, private val favoriteRepository: FavoriteRepository) : ViewModel() {
 
     private val _movieCategories: MutableLiveData<List<Category>> = MutableLiveData()
     val movieCategories: LiveData<List<Category>> get() = _movieCategories
 
     private val _serieCategories: MutableLiveData<List<Category>> = MutableLiveData()
     val serieCategories: LiveData<List<Category>> get() = _serieCategories
+
+    private val _favorites: MutableLiveData<List<FavoriteEntity>> = MutableLiveData()
+    val favorites: LiveData<List<FavoriteEntity>> get() = _favorites
 
     private val _token: MutableLiveData<Token> = MutableLiveData()
     val token: LiveData<Token>
@@ -76,4 +82,44 @@ class HomeViewModel @Inject constructor(private val movieRepository: MovieReposi
             }
         }
     }
+
+    fun getFavoriteFilmAndSeries(): LiveData<List<FavoriteEntity>>{
+        /*viewModelScope.launch(Dispatchers.IO) {
+
+            _favorites.postValue(result.value)
+        }*/
+        return favoriteRepository.getAllFavorite()
+    }
+
+
+    fun getMovieFromFavoriteId(movieId: Long): LiveData<Movie> {
+        val returnResult = MutableLiveData<Movie>()
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = movieRepository.getMovieById(movieId)) {
+                is Result.Succes -> {
+                    returnResult.postValue(result.data)
+                }
+                is Result.Error -> {
+                    _error.postValue(result.message)
+                }
+            }
+        }
+        return returnResult
+    }
+
+    fun getSerieFromFavoriteId(serieId: Long):  LiveData<Serie>{
+        val returnResult = MutableLiveData<Serie>()
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = serieRepository.getSerieById(serieId)) {
+                is Result.Succes -> {
+                    returnResult.postValue(result.data)
+                }
+                is Result.Error -> {
+                    _error.postValue(result.message)
+                }
+            }
+        }
+        return returnResult
+    }
+
 }
