@@ -90,6 +90,35 @@
             tools:text="Note Moyenne" />
 
         <TextView
+            android:id="@+id/trailer_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/trailer"
+            android:textSize="18sp"
+            android:padding="8dp"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/no_trailers_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_trailers_available"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="16dp"
+            android:visibility="gone"
+            android:layout_marginTop="16dp"
+            />
+
+
+        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+            android:id="@+id/youtube_player_view"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp"/>
+
+        <TextView
             android:id="@+id/similar_serie_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

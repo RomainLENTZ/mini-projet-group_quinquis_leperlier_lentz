@@ -2,6 +2,7 @@ package com.leperlier.quinquis.lentz.imdb.ui.serieDetail
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,8 @@ import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
 import com.leperlier.quinquis.lentz.imdb.ui.home.HomeFragment
 import com.leperlier.quinquis.lentz.imdb.ui.movieDetail.MovieDetailFragment
 import com.leperlier.quinquis.lentz.imdb.ui.serieList.SerieAdapter
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,10 +48,13 @@ class SerieDetailFragment : Fragment() {
         val fromHome: Boolean? = arguments?.getBoolean("fromHome", false)
 
         serie?.let {
+            serieDetailViewModel.getSerieTrailers(it.id.toLong())
+
             binding.apply {
                 if (it.backdrop_path != null) {
                     loadImageWithGlide(basicUrl + it.backdrop_path)
                 }
+
                 serieTitle.text = it.name
                 serieOverview.text = it.overview
                 serieVoteAverage.text = it.vote_average.toString() + " / 10"
@@ -97,6 +103,15 @@ class SerieDetailFragment : Fragment() {
             })
         }
 
+        serieDetailViewModel.trailers.observe(viewLifecycleOwner, Observer { videos ->
+            val trailer = videos.find { it.type == "Trailer" }
+            if (trailer != null) {
+                setupYoutubePlayer(trailer.key)
+            } else {
+                displayNoTrailersMessage()
+            }
+        })
+
         binding.favoriteButton.setOnClickListener {
             serie?.let { serie ->
                 val favorite = FavoriteEntity(serie.id.toLong(), serie.name, false)
@@ -116,8 +131,26 @@ class SerieDetailFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        if (_binding != null) {
+            binding.youtubePlayerView.release()
+        }
         _binding = null
+        super.onDestroyView()
+    }
+
+    private fun setupYoutubePlayer(videoId: String) {
+        Log.d("YouTubePlayer", "Loading video ID: $videoId")
+
+        binding.youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                youTubePlayer.loadVideo(videoId, 0f)
+                youTubePlayer.play()
+            }
+        })
+    }
+    private fun displayNoTrailersMessage() {
+        binding.noTrailersTextview.visibility = View.VISIBLE
+        binding.youtubePlayerView.visibility = View.GONE
     }
 
 }

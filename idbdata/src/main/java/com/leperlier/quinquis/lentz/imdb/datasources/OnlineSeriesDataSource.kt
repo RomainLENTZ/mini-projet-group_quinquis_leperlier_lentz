@@ -8,6 +8,7 @@ import com.leperlier.quinquis.lentz.imdb.api.service.SerieService
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.Serie
 import com.leperlier.quinquis.lentz.imdb.data.Token
+import com.leperlier.quinquis.lentz.imdb.data.Video
 import com.leperlier.quinquis.lentz.imdb.utils.Result
 import com.leperlier.quinquis.lentz.imdb.utils.safeCall // Assurez-vous que ceci est correctement importé.
 import retrofit2.Response
@@ -146,5 +147,24 @@ internal class OnlineSeriesDataSource @Inject constructor(private val service: S
         }
     }
 
-
+    suspend fun getSerieTrailers(serieId: Long): Result<List<Video>> = safeCall {
+        val response = service.getSerieTrailer(serieId)
+        if (response.isSuccessful) {
+            val videos = response.body()?.videos?.filter { it.site == "YouTube" }?.map { video ->
+                Video(
+                    key = video.key,
+                    type = video.type,
+                    site = video.site,
+                    name = video.name
+                )
+            }
+            Result.Succes(videos ?: listOf())
+        } else {
+            Result.Error(
+                exception = Exception("Erreur lors de la récupération des vidéos"),
+                message = response.message(),
+                code = response.code()
+            )
+        }
+    }
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.leperlier.quinquis.lentz.imdb.data.Serie
 import com.leperlier.quinquis.lentz.imdb.data.Token
+import com.leperlier.quinquis.lentz.imdb.data.Video
 import com.leperlier.quinquis.lentz.imdb.local.entities.FavoriteEntity
 import com.leperlier.quinquis.lentz.imdb.repository.FavoriteRepository
 import com.leperlier.quinquis.lentz.imdb.repository.SerieRepository
@@ -29,6 +30,9 @@ class SerieDetailViewModel @Inject constructor(private val repository: SerieRepo
     val error: LiveData<String>
         get() = _error
 
+    private val _trailers = MutableLiveData<List<Video>>()
+    val trailers: LiveData<List<Video>> get() = _trailers
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = repository.getToken()) {
@@ -47,6 +51,19 @@ class SerieDetailViewModel @Inject constructor(private val repository: SerieRepo
             when (val result = repository.getSimilarSeries(serieId)) {
                 is Result.Succes -> {
                     _similarSeries.postValue(result.data)
+                }
+                is Result.Error -> {
+                    _error.postValue(result.message)
+                }
+            }
+        }
+    }
+
+    fun getSerieTrailers(serieId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = repository.getSerieTrailers(serieId)) {
+                is Result.Succes -> {
+                    _trailers.postValue(result.data.filter { it.type == "Trailer" })
                 }
                 is Result.Error -> {
                     _error.postValue(result.message)

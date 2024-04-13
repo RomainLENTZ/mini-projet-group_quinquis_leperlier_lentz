@@ -4,6 +4,7 @@ import com.leperlier.quinquis.lentz.imdb.data.Category
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.Serie
 import com.leperlier.quinquis.lentz.imdb.data.Token
+import com.leperlier.quinquis.lentz.imdb.data.Video
 import com.leperlier.quinquis.lentz.imdb.datasources.LocalDataSource
 import com.leperlier.quinquis.lentz.imdb.datasources.OnlineDataSource
 import com.leperlier.quinquis.lentz.imdb.datasources.OnlineSeriesDataSource
@@ -84,9 +85,15 @@ class SerieRepository @Inject internal constructor(
         }
     }
 
+    suspend fun getSerieTrailers(serieId: Long): Result<List<Video>> = when (val result = online.getSerieTrailers(serieId)) {
+        is Result.Succes -> {
+            Result.Succes(result.data)
+        }
+        is Result.Error -> result
+    }
+
     suspend fun getSerieById(serieId: Long): Result<Serie>{
         return online.getSerieById(serieId)
     }
-
 
 }

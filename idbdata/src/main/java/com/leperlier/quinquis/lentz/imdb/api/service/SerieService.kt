@@ -4,6 +4,7 @@ import CategoryResponse
 import MovieResponse
 import SeriesResponse
 import com.leperlier.quinquis.lentz.imdb.api.response.TokenResponse
+import com.leperlier.quinquis.lentz.imdb.api.response.VideoResponse
 import com.leperlier.quinquis.lentz.imdb.data.Serie
 import retrofit2.Response
 import retrofit2.http.GET
@@ -34,5 +35,8 @@ internal interface SerieService {
 
     @GET("tv/{tv_id}")
     suspend fun getSerieById(@Path("tv_id") serieId: Long): Response<Serie>
+
+    @GET("tv/{tv_id}/videos")
+    suspend fun getSerieTrailer(@Path("tv_id") serieId: Long): Response<VideoResponse>
 
 }

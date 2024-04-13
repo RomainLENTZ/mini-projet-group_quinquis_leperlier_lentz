@@ -1,7 +1,7 @@
 package com.leperlier.quinquis.lentz.imdb.ui.movieDetail
 
-import VideoAdapter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,6 +48,7 @@ class MovieDetailFragment : Fragment() {
         movie?.let {
             setupMovieDetails(it, fromHome)
             movieDetailViewModel.getMovieProviders(it.id)
+            movieDetailViewModel.getMovieTrailers(it.id.toInt())
 
             movieDetailViewModel.isFavorite(it.id).observe(viewLifecycleOwner) { isFavorite ->
                 isCurrentFavorite = isFavorite
@@ -57,16 +58,16 @@ class MovieDetailFragment : Fragment() {
                     binding.favoriteButton.setImageResource(R.drawable.baseline_favorite_border_24)
                 }
             }
-
-            movieDetailViewModel.trailers.observe(viewLifecycleOwner, Observer { videos ->
-                val trailer = videos.find { it.type == "Trailer" }
-                if (trailer != null) {
-                    setupYoutubePlayer(trailer.key)
-                } else {
-                    displayNoTrailersMessage()
-                }
-            })
         }
+
+        movieDetailViewModel.trailers.observe(viewLifecycleOwner, Observer { videos ->
+            val trailer = videos.find { it.type == "Trailer" }
+            if (trailer != null) {
+                setupYoutubePlayer(trailer.key)
+            } else {
+                displayNoTrailersMessage()
+            }
+        })
 
         movieDetailViewModel.providers.observe(viewLifecycleOwner) { providers ->
             if (providers.isEmpty()) {
@@ -126,6 +127,7 @@ class MovieDetailFragment : Fragment() {
     }
     private fun displayNoTrailersMessage() {
         binding.noTrailersTextview.visibility = View.VISIBLE
+        binding.youtubePlayerView.visibility = View.GONE
     }
 
 
