@@ -1,5 +1,6 @@
 package com.leperlier.quinquis.lentz.imdb.ui.movieDetail
 
+import VideoAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,10 +15,13 @@ import com.gmail.eamosse.imdb.databinding.FragmentMovieDetailBinding
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.MovieDesignType
 import com.leperlier.quinquis.lentz.imdb.data.Provider
+import com.leperlier.quinquis.lentz.imdb.data.Video
 import com.leperlier.quinquis.lentz.imdb.local.entities.FavoriteEntity
 import com.leperlier.quinquis.lentz.imdb.ui.MovieAdapter
 import com.leperlier.quinquis.lentz.imdb.ui.home.HomeFragment
 import com.leperlier.quinquis.lentz.imdb.ui.providers.ProvidersAdapter
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -53,6 +57,15 @@ class MovieDetailFragment : Fragment() {
                     binding.favoriteButton.setImageResource(R.drawable.baseline_favorite_border_24)
                 }
             }
+
+            movieDetailViewModel.trailers.observe(viewLifecycleOwner, Observer { videos ->
+                val trailer = videos.find { it.type == "Trailer" }
+                if (trailer != null) {
+                    setupYoutubePlayer(trailer.key)
+                } else {
+                    displayNoTrailersMessage()
+                }
+            })
         }
 
         movieDetailViewModel.providers.observe(viewLifecycleOwner) { providers ->
@@ -103,6 +116,19 @@ class MovieDetailFragment : Fragment() {
         }
     }
 
+    private fun setupYoutubePlayer(videoId: String) {
+        binding.youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                youTubePlayer.loadVideo(videoId, 0f)
+                youTubePlayer.play()
+            }
+        })
+    }
+    private fun displayNoTrailersMessage() {
+        binding.noTrailersTextview.visibility = View.VISIBLE
+    }
+
+
     private fun setupProvidersRecyclerView(providers: List<Provider>) {
         val providersAdapter = ProvidersAdapter(providers)
         binding.streamingServicesRecyclerView.apply {
@@ -145,8 +171,11 @@ class MovieDetailFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        if (_binding != null) {
+            binding.youtubePlayerView.release()
+        }
         _binding = null
+        super.onDestroyView()
     }
 
     fun handleFavorite(){
