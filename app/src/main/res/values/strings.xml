@@ -23,4 +23,5 @@
     <string name="trailer">Trailer</string>
     <string name="no_trailers_available">Aucun trailer n\'a été trouvé pour ce film</string>
     <string name="similars_movies">Similars movies</string>
+    <string name="about">About</string>
 </resources>
