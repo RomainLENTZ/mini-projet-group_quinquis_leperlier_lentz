@@ -6,7 +6,8 @@ Comme expliqué par mail, suite a des problèmes de droit sur le git, nous avons
 
 - [x] Catégories de films
 - [X] Catégories de séries
-  [image](images_readme/categories.png)
+  ![Categories](images_readme/categories.png)
+
 
 - [x] Liste des films par catégories
   [image](images_readme/movie_by_category.png)
