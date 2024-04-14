@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gmail.eamosse.imdb.databinding.MovieHorizontalItemBinding
+import com.leperlier.quinquis.lentz.imdb.data.Authors
 import com.leperlier.quinquis.lentz.imdb.data.Category
 
 class MovieHorizontalAdapter(private var items: List<Category>, private val onItemClick: (Category) -> Unit) :
@@ -35,6 +36,7 @@ class MovieHorizontalAdapter(private var items: List<Category>, private val onIt
 
     fun updateCategories(newCategories: List<Category>) {
         items = newCategories
-        notifyDataSetChanged() // Notifie le RecyclerView que les données ont changé et qu'il doit se rafraîchir
+        notifyDataSetChanged()
     }
+
 }

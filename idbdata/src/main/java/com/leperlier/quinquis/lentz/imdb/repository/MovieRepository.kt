@@ -2,6 +2,7 @@ package com.leperlier.quinquis.lentz.imdb.repository
 
 import androidx.lifecycle.LiveData
 import com.leperlier.quinquis.lentz.imdb.api.response.CountryProviders
+import com.leperlier.quinquis.lentz.imdb.data.Authors
 import com.leperlier.quinquis.lentz.imdb.data.Category
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.Provider
@@ -12,6 +13,7 @@ import com.leperlier.quinquis.lentz.imdb.datasources.OnlineDataSource
 import com.leperlier.quinquis.lentz.imdb.local.entities.FavoriteEntity
 import com.leperlier.quinquis.lentz.imdb.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
+import toAuthor
 import toCategory
 import java.util.Locale.filter
 import javax.inject.Inject

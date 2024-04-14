@@ -1,9 +1,11 @@
 package com.leperlier.quinquis.lentz.imdb.datasources
 
+import AuthorsResponse
 import CategoryResponse
 import MovieResponse
 import com.leperlier.quinquis.lentz.imdb.api.response.toToken
 import com.leperlier.quinquis.lentz.imdb.api.service.MovieService
+import com.leperlier.quinquis.lentz.imdb.data.Authors
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.Provider
 import com.leperlier.quinquis.lentz.imdb.data.Token

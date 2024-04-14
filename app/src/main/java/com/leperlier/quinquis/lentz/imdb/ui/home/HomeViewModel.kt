@@ -4,11 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.leperlier.quinquis.lentz.imdb.data.Authors
 import com.leperlier.quinquis.lentz.imdb.data.Category
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.Serie
 import com.leperlier.quinquis.lentz.imdb.data.Token
 import com.leperlier.quinquis.lentz.imdb.local.entities.FavoriteEntity
+import com.leperlier.quinquis.lentz.imdb.repository.AuthorsRepository
 import com.leperlier.quinquis.lentz.imdb.repository.FavoriteRepository
 import com.leperlier.quinquis.lentz.imdb.repository.MovieRepository
 import com.leperlier.quinquis.lentz.imdb.repository.SerieRepository
@@ -19,10 +21,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val movieRepository: MovieRepository, private val serieRepository: SerieRepository, private val favoriteRepository: FavoriteRepository) : ViewModel() {
+class HomeViewModel @Inject constructor(private val movieRepository: MovieRepository, private val authorsRepository: AuthorsRepository, private val serieRepository: SerieRepository, private val favoriteRepository: FavoriteRepository) : ViewModel() {
 
     private val _movieCategories: MutableLiveData<List<Category>> = MutableLiveData()
     val movieCategories: LiveData<List<Category>> get() = _movieCategories
+
+    private val _authors: MutableLiveData<List<Authors>> = MutableLiveData()
+    val authors: LiveData<List<Authors>> get() = _authors
 
     private val _serieCategories: MutableLiveData<List<Category>> = MutableLiveData()
     val serieCategories: LiveData<List<Category>> get() = _serieCategories
@@ -62,6 +67,19 @@ class HomeViewModel @Inject constructor(private val movieRepository: MovieReposi
             when (val result = movieRepository.getCategories()) {
                 is Result.Succes -> {
                     _movieCategories.postValue(result.data)
+                }
+                is Result.Error -> {
+                    _error.postValue(result.message)
+                }
+            }
+        }
+    }
+
+    fun getAuthors() {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = authorsRepository.getAuthors()) {
+                is Result.Succes -> {
+                    _authors.postValue(result.data)
                 }
                 is Result.Error -> {
                     _error.postValue(result.message)
