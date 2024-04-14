@@ -10,36 +10,37 @@ Comme expliqué par mail, suite a des problèmes de droit sur le git, nous avons
 
 
 - [x] Liste des films par catégories
-  [image](images_readme/movie_by_category.png)
+  ![movies_by_category](images_readme/movie_by_category.png)
+
 
 - [X] Liste des films par auteurs
 - [x] Détails des films
-  [image](images_readme/movie_detail_1.png)
-  [image](images_readme/movie_detail_2.png)
+  ![movie_detail](images_readme/movie_detail_1.png)
+  ![movie_detail](images_readme/movie_detail_2.png)
 
 - [X] Détails des séries
-  [image](images_readme/movie_detail_1.png)
-  [image](images_readme/movie_detail_2.png)
+  ![serie_detail](images_readme/serie_detail_1.png)
+  ![serie_detail](images_readme/serie_detail_2.png)
 
 - [x] Films à la une
 - [X] Séries à la une
-  [image](images_readme/trending.png)
+  ![trending](images_readme/trending.png)
 
 - [X] Visualiser la bande annonce d'un film ou d'une série
-  [image](images_readme/trailer.png)
+  ![trailer](images_readme/trailer.png)
 
 - [X] Liste de films et séries en favoris (géré dans une base de données locale)
-  [image](images_readme/favoris_1.png)
-  [image](images_readme/favoris_2.png)
+  ![favoris1](images_readme/favoris_1.png)
+  ![favoris2](images_readme/favoris_2.png)
 
 - [x] Une vue A propos contenant les fonctionalités de l'application, le profile LinkedIn des membres du groupe, le listing des librairies utilisées, ...
-  [image](images_readme/about.png)
+  ![about](images_readme/about.png)
 
 - [x] Voir la liste des plateformes pour regarder un film
-  [image](images_readme/platform.png)
+  ![platform](images_readme/platform.png)
 
-- [x] Une navigation bar pour naviguer d'une page a l'autre 
-  [image](images_readme/nav_bar.png)
+- [x] Une navigation bar pour naviguer d'une page a l'autre
+  ![nav_bar](images_readme/nav_bar.png)
 
 
 
