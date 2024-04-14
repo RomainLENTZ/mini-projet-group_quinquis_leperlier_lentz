@@ -8,6 +8,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.gmail.eamosse.imdb.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.leperlier.quinquis.lentz.imdb.ui.home.HomeFragment
+import com.leperlier.quinquis.lentz.imdb.ui.menu.about.AboutFragment
+import com.leperlier.quinquis.lentz.imdb.ui.menu.trending.TrendingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,13 +25,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun initNavController() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_trending, R.id.navigation_about
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        navView.setOnNavigationItemSelectedListener { item ->
+            val fragment = when (item.itemId) {
+                R.id.navigation_home -> HomeFragment()
+                R.id.navigation_trending -> TrendingFragment()
+                R.id.navigation_about -> AboutFragment()
+                else -> null
+            }
+            fragment?.let {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, it)
+                    .commit()
+            }
+            true
+        }
     }
 }
