@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.leperlier.quinquis.lentz.imdb.data.Author
 import com.leperlier.quinquis.lentz.imdb.data.Category
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.Token
@@ -70,6 +71,19 @@ class MovieListViewModel @Inject constructor(private val repository: MovieReposi
     fun getMoviesByCategory(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = repository.getMoviesByCategory(categoryId)) {
+                is Result.Succes -> {
+                    _movies.postValue(result.data)
+                }
+                is Result.Error -> {
+                    _error.postValue(result.message)
+                }
+            }
+        }
+    }
+
+    fun getMoviesByAuthor(authorId: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = repository.getMoviesByAuthor(authorId)) {
                 is Result.Succes -> {
                     _movies.postValue(result.data)
                 }

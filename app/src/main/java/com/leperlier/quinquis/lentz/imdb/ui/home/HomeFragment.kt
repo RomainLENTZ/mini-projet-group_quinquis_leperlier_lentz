@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gmail.eamosse.imdb.R
 import com.gmail.eamosse.imdb.databinding.FragmentHomeBinding
+import com.leperlier.quinquis.lentz.imdb.data.Author
 import com.leperlier.quinquis.lentz.imdb.data.Category
 import com.leperlier.quinquis.lentz.imdb.local.entities.FavoriteEntity
 import com.leperlier.quinquis.lentz.imdb.ui.movieDetail.MovieDetailFragment
@@ -34,11 +35,13 @@ class HomeFragment : Fragment() {
 
         // Configuration initiale des RecyclerViews pour les catégories
         setupCategoryRecyclerView()
+        setupAuthorsRecyclerView()
         setupSerieCategoryRecyclerView()
         setupFavoriteRecyclerView()
 
         homeViewModel.token.observe(viewLifecycleOwner, Observer {
             homeViewModel.getMovieCategories()
+            homeViewModel.getAuthors()
             homeViewModel.getSerieCategories()
             homeViewModel.getFavoriteFilmAndSeries().observe(viewLifecycleOwner){ favs ->
                 (binding.favoriteMovieAndSeriesList.adapter as FavoriteHorizontalAdapter).updateFavorites(favs ?: emptyList())
@@ -47,6 +50,10 @@ class HomeFragment : Fragment() {
 
         homeViewModel.movieCategories.observe(viewLifecycleOwner, Observer { categories ->
             (binding.categoryList.adapter as MovieHorizontalAdapter).updateCategories(categories)
+        })
+
+        homeViewModel.authors.observe(viewLifecycleOwner, Observer { authors ->
+            (binding.authorsList.adapter as AuthorsHorizontalAdapter).updateAuthors(authors)
         })
 
         homeViewModel.serieCategories.observe(viewLifecycleOwner, Observer { series ->
@@ -62,6 +69,13 @@ class HomeFragment : Fragment() {
         binding.categoryList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.categoryList.adapter = MovieHorizontalAdapter(listOf()) { category ->
             loadMovieListFragment(category)
+        }
+    }
+
+    private fun setupAuthorsRecyclerView() {
+        binding.authorsList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.authorsList.adapter = AuthorsHorizontalAdapter(listOf()) { author ->
+            loadAuthorListFragment(author)
         }
     }
 
@@ -95,8 +109,24 @@ class HomeFragment : Fragment() {
     private fun loadMovieListFragment(category: Category) {
         val fragment = MovieListFragment().apply {
             arguments = Bundle().apply {
+                putBoolean("byCategory", true)
                 putString("categoryName", category.name)
                 putInt("categoryId", category.id)
+            }
+        }
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+
+    private fun loadAuthorListFragment(author: Author){
+        val fragment = MovieListFragment().apply {
+            arguments = Bundle().apply {
+                putBoolean("byCategory", false)
+                putString("authorName", author.name)
+                putInt("authorId", author.id)
             }
         }
         requireActivity().supportFragmentManager.beginTransaction()

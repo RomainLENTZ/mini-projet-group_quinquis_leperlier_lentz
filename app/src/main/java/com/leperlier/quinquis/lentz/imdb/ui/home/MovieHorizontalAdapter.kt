@@ -35,6 +35,7 @@ class MovieHorizontalAdapter(private var items: List<Category>, private val onIt
 
     fun updateCategories(newCategories: List<Category>) {
         items = newCategories
-        notifyDataSetChanged() // Notifie le RecyclerView que les données ont changé et qu'il doit se rafraîchir
+        notifyDataSetChanged()
     }
+
 }

@@ -117,6 +117,19 @@ internal class OnlineDataSource @Inject constructor(private val service: MovieSe
             }
         }
     }
+    suspend fun getMoviesByAuthor(authorId: Int): Result<MovieResponse> = safeCall {
+        service.getMoviesByAuthor(authorId).let { response ->
+            if (response.isSuccessful) {
+                Result.Succes(response.body()!!)
+            } else {
+                Result.Error(
+                    exception = Exception("Erreur lors de la récupération des films par autheur"),
+                    message = response.message(),
+                    code = response.code()
+                )
+            }
+        }
+    }
 
     suspend fun getSimilarMovies(movieId: Long): Result<MovieResponse> = safeCall {
         service.getSimilarMovies(movieId).let { response ->

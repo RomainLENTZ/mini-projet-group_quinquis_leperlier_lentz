@@ -1,5 +1,6 @@
 package com.leperlier.quinquis.lentz.imdb.api.service
 
+import AuthorsResponse
 import CategoryResponse
 import MovieResponse
 import com.leperlier.quinquis.lentz.imdb.api.response.ProviderResponse
@@ -17,6 +18,9 @@ internal interface MovieService {
 
     @GET("genre/movie/list")
     suspend fun getCategories(): Response<CategoryResponse>
+
+    @GET("person/popular")
+    suspend fun getAuthors(): Response<AuthorsResponse>
 
     @GET("trending/movie/week")
     suspend fun getWeekTrendingMovies(): Response<MovieResponse>

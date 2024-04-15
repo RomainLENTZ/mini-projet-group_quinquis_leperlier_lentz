@@ -23,14 +23,27 @@ class MovieListFragment : Fragment() {
     private var _binding: FragmentMovieListBinding? = null
     private val binding get() = _binding!!
 
+    private var byCategory: Boolean? = null
+
     private var categoryId: Int? = null
     private var categoryName: String? = null
+
+    private var authorId: Int? = null
+    private var authorName: String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            categoryId = it.getInt("categoryId")
-            categoryName = it.getString("categoryName")
+            byCategory = it.getBoolean("byCategory")
+            if(byCategory == true){
+                categoryId = it.getInt("categoryId")
+                categoryName = it.getString("categoryName")
+            }else{
+                authorId = it.getInt("authorId")
+                authorName = it.getString("authorName")
+            }
+
         }
     }
 
@@ -42,7 +55,11 @@ class MovieListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.moviesRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.movieLabel.text = categoryName
+        if(byCategory == true)
+            binding.movieLabel.text = categoryName
+        else
+            binding.movieLabel.text = authorName
+
         binding.buttonBack.setOnClickListener{
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.container, HomeFragment())
@@ -52,7 +69,11 @@ class MovieListFragment : Fragment() {
 
         with(movieListViewModel) {
             token.observe(viewLifecycleOwner, Observer {
-                getMoviesByCategory(categoryId ?: 0)
+                if(byCategory == true){
+                    getMoviesByCategory(categoryId ?: 0)
+                }else{
+                    getMoviesByAuthor(authorId ?: 0)
+                }
             })
 
             movies.observe(viewLifecycleOwner, Observer { moviesList ->
