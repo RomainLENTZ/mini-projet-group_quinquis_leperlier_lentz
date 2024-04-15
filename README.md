@@ -2,7 +2,11 @@
 
 Comme expliqué par mail, suite a des problèmes de droit sur le git, nous avons dû créer un repo à part.
 
-## Fonctionnalités
+## Démo
+
+![La video démo](images_readme/demo.mp4)\
+
+### Fonctionnalités
 
 - [x] Catégories de films
 - [X] Catégories de séries
