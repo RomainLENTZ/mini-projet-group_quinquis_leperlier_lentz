@@ -14,6 +14,8 @@ Comme expliqué par mail, suite a des problèmes de droit sur le git, nous avons
 
 
 - [X] Liste des films par auteurs
+  ![movies_by_author](images_readme/authors_1.jpg)\
+  ![movies_by_author](images_readme/authors_2.jpg)\
 - [x] Détails des films
   ![movie_detail](images_readme/movie_detail_1.png)
   ![movie_detail](images_readme/movie_detail_2.png)\
