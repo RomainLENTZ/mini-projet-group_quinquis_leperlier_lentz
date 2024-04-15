@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.leperlier.quinquis.lentz.imdb.data.Authors
+import com.leperlier.quinquis.lentz.imdb.data.Author
 import com.leperlier.quinquis.lentz.imdb.data.Category
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.Serie
@@ -26,8 +26,8 @@ class HomeViewModel @Inject constructor(private val movieRepository: MovieReposi
     private val _movieCategories: MutableLiveData<List<Category>> = MutableLiveData()
     val movieCategories: LiveData<List<Category>> get() = _movieCategories
 
-    private val _authors: MutableLiveData<List<Authors>> = MutableLiveData()
-    val authors: LiveData<List<Authors>> get() = _authors
+    private val _authors: MutableLiveData<List<Author>> = MutableLiveData()
+    val authors: LiveData<List<Author>> get() = _authors
 
     private val _serieCategories: MutableLiveData<List<Category>> = MutableLiveData()
     val serieCategories: LiveData<List<Category>> get() = _serieCategories

@@ -64,10 +64,10 @@ internal class OnlineAuthorsDataSource @Inject constructor(private val service: 
         TODO("I don't know how to save a token, the local datasource probably does")
     }
 
-    suspend fun getAuthors(): Result<List<AuthorsResponse.Author>> = safeCall {
+    suspend fun getAuthors(): Result<AuthorsResponse> = safeCall {
         service.getAuthors().let { response ->
             if (response.isSuccessful) {
-                Result.Succes(response.body()!!.authors)
+                Result.Succes(response.body()!!)
             } else {
                 Result.Error(
                     exception = Exception("Erreur lors de la récupération des auteurs"),

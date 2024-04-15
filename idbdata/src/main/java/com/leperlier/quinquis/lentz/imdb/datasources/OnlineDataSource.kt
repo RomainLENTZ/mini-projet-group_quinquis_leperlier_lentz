@@ -1,11 +1,9 @@
 package com.leperlier.quinquis.lentz.imdb.datasources
 
-import AuthorsResponse
 import CategoryResponse
 import MovieResponse
 import com.leperlier.quinquis.lentz.imdb.api.response.toToken
 import com.leperlier.quinquis.lentz.imdb.api.service.MovieService
-import com.leperlier.quinquis.lentz.imdb.data.Authors
 import com.leperlier.quinquis.lentz.imdb.data.Movie
 import com.leperlier.quinquis.lentz.imdb.data.Provider
 import com.leperlier.quinquis.lentz.imdb.data.Token
@@ -113,6 +111,19 @@ internal class OnlineDataSource @Inject constructor(private val service: MovieSe
             } else {
                 Result.Error(
                     exception = Exception("Erreur lors de la récupération des films par genres"),
+                    message = response.message(),
+                    code = response.code()
+                )
+            }
+        }
+    }
+    suspend fun getMoviesByAuthor(authorId: Int): Result<MovieResponse> = safeCall {
+        service.getMoviesByAuthor(authorId).let { response ->
+            if (response.isSuccessful) {
+                Result.Succes(response.body()!!)
+            } else {
+                Result.Error(
+                    exception = Exception("Erreur lors de la récupération des films par autheur"),
                     message = response.message(),
                     code = response.code()
                 )

@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gmail.eamosse.imdb.databinding.AuthorHorizontalItemBinding
-import com.leperlier.quinquis.lentz.imdb.data.Authors
+import com.leperlier.quinquis.lentz.imdb.data.Author
 
-class AuthorsHorizontalAdapter(private var items: List<Authors>, private val onItemClick: (Authors) -> Unit) :
+class AuthorsHorizontalAdapter(private var items: List<Author>, private val onItemClick: (Author) -> Unit) :
     RecyclerView.Adapter<AuthorsHorizontalAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: AuthorHorizontalItemBinding) :
@@ -18,7 +18,7 @@ class AuthorsHorizontalAdapter(private var items: List<Authors>, private val onI
             }
         }
 
-        fun bind(item: Authors) {
+        fun bind(item: Author) {
             binding.authorName.text = item.name
         }
     }
@@ -29,12 +29,12 @@ class AuthorsHorizontalAdapter(private var items: List<Authors>, private val onI
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        holder.bind(items[position])
     }
 
     override fun getItemCount(): Int = items.size
 
-    fun updateAuthors(newAuthors: List<Authors>) {
+    fun updateAuthors(newAuthors: List<Author>) {
         items = newAuthors
         notifyDataSetChanged()
     }

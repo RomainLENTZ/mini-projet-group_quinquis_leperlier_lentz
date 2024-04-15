@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gmail.eamosse.imdb.R
 import com.gmail.eamosse.imdb.databinding.FragmentHomeBinding
-import com.leperlier.quinquis.lentz.imdb.data.Authors
+import com.leperlier.quinquis.lentz.imdb.data.Author
 import com.leperlier.quinquis.lentz.imdb.data.Category
 import com.leperlier.quinquis.lentz.imdb.local.entities.FavoriteEntity
 import com.leperlier.quinquis.lentz.imdb.ui.movieDetail.MovieDetailFragment
@@ -75,7 +75,7 @@ class HomeFragment : Fragment() {
     private fun setupAuthorsRecyclerView() {
         binding.authorsList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.authorsList.adapter = AuthorsHorizontalAdapter(listOf()) { author ->
-            //loadAuthorListFragment(author)
+            loadAuthorListFragment(author)
         }
     }
 
@@ -109,6 +109,7 @@ class HomeFragment : Fragment() {
     private fun loadMovieListFragment(category: Category) {
         val fragment = MovieListFragment().apply {
             arguments = Bundle().apply {
+                putBoolean("byCategory", true)
                 putString("categoryName", category.name)
                 putInt("categoryId", category.id)
             }
@@ -119,10 +120,11 @@ class HomeFragment : Fragment() {
             .commit()
     }
 
-    /*
-    private fun loadAuthorListFragment(author: Authors){
-        val fragment = AuthorsListFragment().apply {
+
+    private fun loadAuthorListFragment(author: Author){
+        val fragment = MovieListFragment().apply {
             arguments = Bundle().apply {
+                putBoolean("byCategory", false)
                 putString("authorName", author.name)
                 putInt("authorId", author.id)
             }
@@ -132,8 +134,6 @@ class HomeFragment : Fragment() {
             .addToBackStack(null)
             .commit()
     }
-
-     */
 
     private fun loadFavoriteFragment(fav: FavoriteEntity){
         if(fav.isMovie){
